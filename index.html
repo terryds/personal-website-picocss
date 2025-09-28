@@ -171,15 +171,28 @@
 
           if (!OSS_REPOS.length) return;
 
-          OSS_REPOS.forEach(function (url) {
+          var tasks = OSS_REPOS.map(function (url) {
             var parsed = extractOwnerRepo(url);
             if (!parsed) {
-              buildItem(target, url, null);
-              return;
+              return Promise.resolve({ url: url, data: null, stars: null });
             }
-            fetchRepo(parsed.owner, parsed.repo)
-              .then(function (data) { buildItem(target, url, data); })
-              .catch(function () { buildItem(target, url, null); });
+            return fetchRepo(parsed.owner, parsed.repo)
+              .then(function (data) {
+                var stars = (data && typeof data.stargazers_count === 'number') ? data.stargazers_count : null;
+                return { url: url, data: data, stars: stars };
+              })
+              .catch(function () { return { url: url, data: null, stars: null }; });
+          });
+
+          Promise.all(tasks).then(function (results) {
+            results.sort(function (a, b) {
+              var as = a.stars, bs = b.stars;
+              if (as == null && bs == null) return 0;
+              if (as == null) return 1;
+              if (bs == null) return -1;
+              return bs - as;
+            });
+            results.forEach(function (r) { buildItem(target, r.url, r.data); });
           });
         }
 
