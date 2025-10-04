@@ -1,206 +1,313 @@
-<!DOCTYPE html>
-<html lang="en" data-theme="dark">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="color-scheme" content="dark light">
-    <title>Terry Djony — Personal Website</title>
-    <meta name="description" content="Personal website of Terry Djony.">
+<!doctypehtml>
+  <html lang="en">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Terry Djony</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --background-color: #000910;
+      --text-color: #33ff00;
+      --link-color: #33ff00;
+      --link-hover-color: #001220
+    }
 
-    <!-- Pico.css -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2.1.1/css/pico.classless.min.css"
-    >
-    <style>
-      /* Increase vertical gap between sections */
-      main > section { margin-top: 3rem; margin-bottom: 3rem; }
+    body {
+      background-color: var(--background-color);
+      color: var(--text-color);
+      font-family: 'IBM Plex Mono', monospace;
+      line-height: 1.6;
+      padding: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+      position: relative;
+      overflow-x: hidden
+    }
 
-      mark {
-        padding: 0;
-        background: linear-gradient(to right, rgb(215.4, 140.8, 210.2), rgb(184.5, 153, 237.75), rgb(156.6, 165.3, 232.6), rgb(142.75, 168.95, 240.05));
-        background-clip: text;
-        -webkit-background-clip: text;
-        color: transparent;
+    .crt-overlay::before {
+      content: " ";
+      display: block;
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, .25) 50%), linear-gradient(90deg, rgba(255, 0, 0, .06), rgba(0, 255, 0, .02), rgba(0, 0, 255, .06));
+      z-index: 2;
+      background-size: 100% 2px, 3px 100%;
+      pointer-events: none
+    }
+
+    .crt-overlay::after {
+      content: "";
+      position: fixed;
+      top: -50%;
+      left: -50%;
+      right: -50%;
+      bottom: -50%;
+      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise' x='0' y='0'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 150px 150px;
+      opacity: .15;
+      z-index: 1000;
+      pointer-events: none;
+      animation: move 8s linear infinite
+    }
+
+    @keyframes move {
+      0% {
+        transform: translate(0, 0)
       }
-    </style>
-  </head>
 
-  <body>
-    <header>
-      <hgroup>
-        <h1>Terry Djony</h1>
-        <p>Personal website</p>
-      </hgroup>
-      <nav>
-        <ul>
-          <li><a href="#about">About</a></li>
-          <li><a href="#projects">Projects</a></li>
-          <li><a href="#writing">Writing</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
-      </nav>
-    </header>
+      100% {
+        transform: translate(150px, 150px)
+      }
+    }
 
-    <main>
-      <section id="about">
-        <h2><mark>About</mark></h2>
-        <p>
-          Hi, I'm <strong>Terry Djony</strong>. A tech entrepreneur, <a href="https://www.ycombinator.com/verify/jyj7tw4iclddid3l" target="_blank" rel="noopener">YC Batch W21 alumni</a> from Indonesia.
-        </p>
-        <p>
-            I earn my living by building software products. I mostly handle coding with Javascript (Deno) + Cursor, design marketing assets with Canva, and do a marketing research with Google Keyword Planner.
-        </p>
-        <p>
-            Born in a small city (Lampung, Indonesia), I taught myself programming using books and the internet during my middle school years.
-        </p>
-        <p>
-            I own <a href="https://duoIingo.com" target="_blank" rel="noopener">DuoIingo.com</a> <i>(just for fun hehe)</i>
-        </p>
-        <p>
-          You can find my open-source code on
-          <a href="https://github.com/terryds" target="_blank" rel="noopener">GitHub</a>.
-        </p>
-      </section>
+    .container {
+      padding: 20px;
+      position: relative;
+      z-index: 1
+    }
 
-      <section id="projects">
-        <h2>Experience and Contributions</h2>
-        <ul>
-          <li>B2B SaaS</li>
-          <li>Agentic AI</li>
-          <li>Chrome Extensions & Google Workspace Add-ons</li>
-          <li>Open source
-            <ul id="oss-list">
-            </ul>
-          </li>
-        </ul>
-      </section>
+    h1 {
+      color: var(--text-color);
+      margin-bottom: 15px;
+      text-shadow: 0 0 5px var(--text-color);
+      display: inline;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 3em;
+      font-weight: 400;
+      font-style: normal
+    }
 
-      <section id="writing">
-        <h2>Writing & Content</h2>
-        <ul>
-          <li>
-            <a href="https://blog.dton.io/create-a-ton-address-tracking-telegram-bot-with-dton-webhook/" target="_blank" rel="noopener">DTon Webhook Tracking</a>
-          </li>
-          <li>
-            ... need to write more, especially about Agentic AI
-          </li>
-        </ul>
-      </section>
+    .name-container {
+      margin-bottom: 40px
+    }
 
-      <section id="contact">
-        <h2>Contact</h2>
-        <p>
-          <a href="mailto:hi@terrydjony.com" role="button">Email me</a>
-        </p>
-      </section>
-    </main>
+    a {
+      color: var(--link-color);
+      text-decoration: none
+    }
 
-    <footer>
-      <small>© 2025 Terry Djony • Built with <a href="https://picocss.com" target="_blank" rel="noopener">Pico</a></small>
-    </footer>
+    a:hover {
+      text-decoration: none
+    }
 
-    <script>
-      (function () {
-        // Add your GitHub repo links here (full URLs like https://github.com/owner/repo)
-        var OSS_REPOS = [
-          'https://github.com/terryds/awesome-strudel',
-          'https://github.com/terryds/google-street-view-driving-simulator',
-          'https://github.com/terryds/pemilu-2024-scraper',
-          'https://github.com/terryds/solana-action-generator-telegram-bot',
-        ];
+    .links {
+      margin-bottom: 30px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px
+    }
 
-        function formatStars(n) {
-          if (typeof n !== 'number') return '';
-          if (n < 1000) return String(n);
-          if (n < 10000) return (n / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
-          return Math.round(n / 100) / 10 + 'k';
-        }
+    .bio a,
+    .links a {
+      border: 1px solid var(--link-color);
+      padding: 2px 4px;
+      position: relative;
+      display: inline-block;
+      transition: color .3s
+    }
 
-        function extractOwnerRepo(url) {
-          try {
-            var u = new URL(url);
-            var parts = u.pathname.split('/').filter(Boolean);
-            if (parts.length >= 2) return { owner: parts[0], repo: parts[1] };
-          } catch (e) {}
-          return null;
-        }
+    .bio a::before,
+    .links a::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--link-color);
+      opacity: 0;
+      transition: opacity .3s;
+      z-index: -1
+    }
 
-        function fetchRepo(owner, repo) {
-          var url = 'https://api.github.com/repos/' + owner + '/' + repo;
-          return fetch(url, { headers: { 'Accept': 'application/vnd.github+json' } })
-            .then(function (r) {
-              if (!r.ok) throw new Error('HTTP ' + r.status);
-              return r.json();
-            });
-        }
+    .bio a:hover::before,
+    .flicker-active::before,
+    .links a:hover::before {
+      animation: erratic-flicker .5s steps(10, end) forwards
+    }
 
-        function buildItem(targetUl, url, data) {
-          var li = document.createElement('li');
-          var a = document.createElement('a');
-          a.href = url;
-          a.target = '_blank';
-          a.rel = 'noopener';
+    @keyframes erratic-flicker {
+      0% {
+        opacity: 0
+      }
 
-          var name = url.replace(/^https?:\/\/github\.com\//, '').replace(/\/$/, '');
-          var repoName = name.split('/')[(name.split('/').length - 1)] || name;
+      10% {
+        opacity: .3
+      }
 
-          var stars = data && typeof data.stargazers_count === 'number' ? data.stargazers_count : null;
-          a.textContent = repoName + (stars != null ? ' (' + formatStars(stars) + ' stars)' : '');
+      20% {
+        opacity: 0
+      }
 
-          li.appendChild(a);
+      30% {
+        opacity: .8
+      }
 
-          var desc = data && data.description ? data.description : '';
-          if (desc) {
-            var small = document.createElement('small');
-            small.style.display = 'block';
-            small.style.opacity = '0.8';
-            small.style.marginTop = '0.25rem';
-            small.textContent = desc;
-            li.appendChild(small);
+      40% {
+        opacity: .1
+      }
+
+      50% {
+        opacity: .5
+      }
+
+      60% {
+        opacity: .2
+      }
+
+      70% {
+        opacity: .9
+      }
+
+      80% {
+        opacity: .4
+      }
+
+      100%,
+      90% {
+        opacity: .7
+      }
+    }
+
+    .bio a:hover,
+    .flicker-active,
+    .links a:hover {
+      color: var(--link-hover-color)
+    }
+
+    .bio {
+      margin-bottom: 30px
+    }
+
+    .publications {
+      margin-top: 30px
+    }
+
+    .blink {
+      animation: blink 1s step-end infinite;
+      vertical-align: baseline;
+      color: var(--text-color);
+      text-shadow: 0 0 5px var(--text-color);
+      display: inline;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 3em;
+      font-weight: 400;
+      font-style: normal
+    }
+
+    @keyframes blink {
+      50% {
+        opacity: 0
+      }
+    }
+
+    .glitch {
+      animation: char-flicker .2s ease-in-out
+    }
+
+    @keyframes char-flicker {
+      0% {
+        opacity: 1
+      }
+
+      25% {
+        opacity: .3
+      }
+
+      50% {
+        opacity: .8
+      }
+
+      75% {
+        opacity: .1
+      }
+
+      100% {
+        opacity: 1
+      }
+    }
+  </style>
+  <div class="crt-overlay"></div>
+  <div class="container">
+    <div class="name-container">
+      <h1 id="name">Terry Djony</h1><span class="blink">_</span>
+    </div>
+    <div class="links"><a
+      href="https://www.ycombinator.com/verify/jyj7tw4iclddid3l" target="_blank">YC W21</a><a href="mailto:hi@terrydjony.com">email</a> <a
+        href="https://github.com/terryds" target="_blank">github</a> <a href="https://x.com/terry_djony" target="_blank">twitter</a> <a
+        href="https://linkedin.com/in/terry-djony" target="_blank">linkedin</a> </div>
+    <div class="bio">I'm a self-taught programmer turned into tech entrepreneur in software industry.<br>Started building startups since college, got into <a href="https://www.ycombinator.com/verify/jyj7tw4iclddid3l" id="flicker-link">YC W21</a>.<br>Also building some indie products MicroSaaS such as Chrome Extensions and Google Workspace Add-ons.<br><br>Currently exploring AI Agents.<br><br>I also do <a href="https://github.com/terryds">open-source projects</a> in my spare time, for example:<br>{{projects}}</div>
+  </div>
+  <script>function glitchName() { let e = document.getElementById("name"), t = e.textContent; var i = Math.floor(Math.random() * t.length), n = t.slice(0, i), l = `<span class="glitch">${t[i]}</span>`, i = t.slice(i + 1), n = (e.innerHTML = n + l + i, setTimeout(() => { e.textContent = t }, 200), Math.floor(4e3 * Math.random()) + 1e3); setTimeout(glitchName, n) } function flickerHiringLink() { let e = document.getElementById("flicker-link"); Math.random() < .05 && (e.classList.add("flicker-active"), setTimeout(() => { e.classList.remove("flicker-active") }, 500)), setTimeout(flickerHiringLink, 200) } glitchName(), flickerHiringLink()</script>
+  <script>
+    (function () {
+      function updateProjects() {
+        try {
+          var links = document.querySelector('.links');
+          if (!links) return;
+          var anchors = links.querySelectorAll('a');
+          var githubHref = null;
+          for (var i = 0; i < anchors.length; i++) {
+            if (anchors[i].href && anchors[i].href.indexOf('github.com/') !== -1) {
+              githubHref = anchors[i].href;
+              break;
+            }
+          }
+          if (!githubHref) return;
+          var match = githubHref.match(/github\.com\/([^\/\?#]+)/i);
+          var username = match && match[1];
+          if (!username) return;
+
+          function escapeHtml(str) {
+            return String(str)
+              .replace(/&/g, '&amp;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;')
+              .replace(/"/g, '&quot;')
+              .replace(/'/g, '&#039;');
           }
 
-          targetUl.appendChild(li);
-        }
+          fetch('https://api.github.com/users/' + username + '/repos?per_page=100')
+            .then(function (r) { return r.json(); })
+            .then(function (repos) {
+              if (!Array.isArray(repos)) return;
+              repos.sort(function (a, b) {
+                var sa = (a && a.stargazers_count) || 0;
+                var sb = (b && b.stargazers_count) || 0;
+                return sb - sa;
+              });
+              var top = repos.slice(0, 2);
+              if (top.length === 0) return;
+              var parts = [];
+              for (var j = 0; j < top.length; j++) {
+                var repo = top[j] || {};
+                var stars = repo.stargazers_count || 0;
+                var name = repo.name || 'repo';
+                var url = (repo && repo.html_url) ? repo.html_url : ('https://github.com/' + username + '/' + name);
+                var label = '<a href="' + url + '" target="_blank">' + escapeHtml(name) + '</a>' + ' (' + stars + ' ' + (stars === 1 ? 'star' : 'stars') + ')';
+                parts.push(label);
+              }
+              var text = parts.join(', and ');
+              var bio = document.querySelector('.bio');
+              if (!bio) return;
+              bio.innerHTML = bio.innerHTML.replace('{{projects}}', text);
+            })
+            .catch(function () { /* ignore */ });
+        } catch (e) { /* ignore */ }
+      }
 
-        function run() {
-          var target = document.getElementById('oss-list');
-          if (!target) return;
-          target.innerHTML = '';
-
-          if (!OSS_REPOS.length) return;
-
-          var tasks = OSS_REPOS.map(function (url) {
-            var parsed = extractOwnerRepo(url);
-            if (!parsed) {
-              return Promise.resolve({ url: url, data: null, stars: null });
-            }
-            return fetchRepo(parsed.owner, parsed.repo)
-              .then(function (data) {
-                var stars = (data && typeof data.stargazers_count === 'number') ? data.stargazers_count : null;
-                return { url: url, data: data, stars: stars };
-              })
-              .catch(function () { return { url: url, data: null, stars: null }; });
-          });
-
-          Promise.all(tasks).then(function (results) {
-            results.sort(function (a, b) {
-              var as = a.stars, bs = b.stars;
-              if (as == null && bs == null) return 0;
-              if (as == null) return 1;
-              if (bs == null) return -1;
-              return bs - as;
-            });
-            results.forEach(function (r) { buildItem(target, r.url, r.data); });
-          });
-        }
-
-        if (document.readyState === 'loading') {
-          document.addEventListener('DOMContentLoaded', run);
-        } else {
-          run();
-        }
-      })();
-    </script>
-  </body>
-</html>
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', updateProjects);
+      } else {
+        updateProjects();
+      }
+    })();
+  </script>
