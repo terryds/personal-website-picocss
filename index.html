@@ -234,8 +234,145 @@
         opacity: 1
       }
     }
+
+    /* Pong Game Styles - Desktop Only */
+    .pong-section {
+      margin-top: 50px;
+      padding-top: 30px;
+      border-top: 1px solid rgba(51, 255, 0, 0.2);
+    }
+
+    .pong-section-title {
+      font-size: 1.2em;
+      color: var(--text-color);
+      text-shadow: 0 0 5px var(--text-color);
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .pong-section {
+        display: none !important;
+      }
+    }
+
+    .pong-container {
+      position: relative;
+      border: 2px solid var(--text-color);
+      box-shadow: 0 0 20px rgba(51, 255, 0, 0.3), inset 0 0 20px rgba(51, 255, 0, 0.1);
+      max-width: 100%;
+      margin: 0 auto;
+    }
+
+    #pong-canvas {
+      display: block;
+      background: var(--background-color);
+      width: 100%;
+      height: auto;
+    }
+
+    .pong-welcome {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: rgba(0, 9, 16, 0.9);
+      text-align: center;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .pong-welcome.hidden {
+      display: none;
+    }
+
+    .pong-title {
+      font-size: 2.5em;
+      color: var(--text-color);
+      text-shadow: 0 0 10px var(--text-color), 0 0 20px var(--text-color);
+      margin-bottom: 20px;
+      letter-spacing: 0.3em;
+    }
+
+    .pong-instructions {
+      font-size: 0.95em;
+      color: var(--text-color);
+      opacity: 0.8;
+      margin-bottom: 10px;
+      line-height: 1.8;
+    }
+
+    .pong-start-hint {
+      font-size: 1em;
+      color: var(--text-color);
+      margin-top: 25px;
+      animation: blink 1s step-end infinite;
+    }
+
+    .pong-controls {
+      font-size: 0.8em;
+      color: var(--text-color);
+      opacity: 0.6;
+      margin-top: 15px;
+    }
+
+    .pong-score {
+      position: absolute;
+      top: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 1.5em;
+      color: var(--text-color);
+      text-shadow: 0 0 10px var(--text-color);
+      opacity: 0.8;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    .pong-game-over {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: rgba(0, 9, 16, 0.9);
+      text-align: center;
+    }
+
+    .pong-game-over.active {
+      display: flex;
+    }
+
+    .pong-game-over-title {
+      font-size: 2em;
+      color: var(--text-color);
+      text-shadow: 0 0 10px var(--text-color);
+      margin-bottom: 15px;
+    }
+
+    .pong-final-score {
+      font-size: 1.2em;
+      color: var(--text-color);
+      opacity: 0.8;
+      margin-bottom: 20px;
+    }
+
+    .pong-restart-hint {
+      font-size: 0.9em;
+      color: var(--text-color);
+      animation: blink 1s step-end infinite;
+    }
   </style>
   <div class="crt-overlay"></div>
+  
   <div class="container">
     <div class="name-container">
       <h1 id="name">Terry Djony</h1><span class="blink">_</span>
@@ -244,6 +381,36 @@
       href="https://blog.terrydjony.com" target="_blank">blog</a><a href="https://news.ycombinator.com/submitted?id=terryds" target="_blank">hackernews</a><a href="https://www.ycombinator.com/verify/jyj7tw4iclddid3l" target="_blank">YC</a> <a
         href="https://github.com/terryds" target="_blank">github</a> <a href="https://x.com/terry_djony" target="_blank">twitter</a><a href="mailto:hi@terrydjony.com">email</a> </div>
     <div class="bio">I'm a self-taught programmer turned into tech entrepreneur in software industry.<br>Started building startups since college, got into <a href="https://www.ycombinator.com/verify/jyj7tw4iclddid3l" id="flicker-link">YC W21</a>.<br>Also building some indie products MicroSaaS such as Chrome Extensions and Google Workspace Add-ons. Currently exploring AI Agents.<br><br>I also do <a href="https://github.com/terryds">open-source projects</a> in my spare time. Most starred repository is {{project}}<br><br>I write my thoughts on <a href="https://blog.terrydjony.com" target="_blank">my blog</a>, feel free to visit!</div>
+    
+    <!-- Pong Game Section (Desktop Only) -->
+    <div class="pong-section" id="pong-section">
+      <div class="pong-section-title">Please enjoy PONG game!</div>
+      <div class="pong-container">
+        <canvas id="pong-canvas" width="760" height="400"></canvas>
+        <div class="pong-score" id="pong-score">0 : 0</div>
+        
+        <!-- Welcome Screen -->
+        <div class="pong-welcome" id="pong-welcome">
+          <div class="pong-title">PONG</div>
+          <div class="pong-instructions">
+            Classic arcade game, terminal edition.<br>
+            First to 5 points wins.
+          </div>
+          <div class="pong-controls">
+            <div>↑ / W - Move paddle up</div>
+            <div>↓ / S - Move paddle down</div>
+          </div>
+          <div class="pong-start-hint">[ PRESS SPACE TO START ]</div>
+        </div>
+        
+        <!-- Game Over Screen -->
+        <div class="pong-game-over" id="pong-game-over">
+          <div class="pong-game-over-title" id="pong-winner">GAME OVER</div>
+          <div class="pong-final-score" id="pong-final-score">0 : 0</div>
+          <div class="pong-restart-hint">[ PRESS SPACE TO PLAY AGAIN ]</div>
+        </div>
+      </div>
+    </div>
   </div>
   <script>function glitchName() { let e = document.getElementById("name"), t = e.textContent; var i = Math.floor(Math.random() * t.length), n = t.slice(0, i), l = `<span class="glitch">${t[i]}</span>`, i = t.slice(i + 1), n = (e.innerHTML = n + l + i, setTimeout(() => { e.textContent = t }, 200), Math.floor(4e3 * Math.random()) + 1e3); setTimeout(glitchName, n) } function flickerHiringLink() { let e = document.getElementById("flicker-link"); Math.random() < .05 && (e.classList.add("flicker-active"), setTimeout(() => { e.classList.remove("flicker-active") }, 500)), setTimeout(flickerHiringLink, 200) } glitchName(), flickerHiringLink()</script>
   <script>
@@ -302,5 +469,281 @@
       } else {
         updateProjects();
       }
+    })();
+  </script>
+  
+  <!-- Pong Game Script (Desktop Only) -->
+  <script>
+    (function() {
+      // Only enable on desktop
+      if (window.innerWidth <= 768) return;
+      
+      const canvas = document.getElementById('pong-canvas');
+      if (!canvas) return;
+      
+      const ctx = canvas.getContext('2d');
+      const welcomeScreen = document.getElementById('pong-welcome');
+      const gameOverScreen = document.getElementById('pong-game-over');
+      const scoreDisplay = document.getElementById('pong-score');
+      const winnerDisplay = document.getElementById('pong-winner');
+      const finalScoreDisplay = document.getElementById('pong-final-score');
+      
+      // Game colors matching the theme
+      const GAME_COLOR = '#33ff00';
+      const BG_COLOR = '#000910';
+      
+      // Game state
+      let gameStarted = false;
+      let animationId = null;
+      
+      // Paddle settings
+      const PADDLE_WIDTH = 10;
+      const PADDLE_HEIGHT = 70;
+      const PADDLE_SPEED = 6;
+      
+      // Ball settings
+      const BALL_SIZE = 10;
+      const BALL_SPEED_INITIAL = 5;
+      let ballSpeedX = BALL_SPEED_INITIAL;
+      let ballSpeedY = BALL_SPEED_INITIAL;
+      
+      // Game objects
+      let player = {
+        x: 15,
+        y: canvas.height / 2 - PADDLE_HEIGHT / 2,
+        score: 0,
+        dy: 0
+      };
+      
+      let computer = {
+        x: canvas.width - 15 - PADDLE_WIDTH,
+        y: canvas.height / 2 - PADDLE_HEIGHT / 2,
+        score: 0,
+        speed: 3.5
+      };
+      
+      let ball = {
+        x: canvas.width / 2,
+        y: canvas.height / 2,
+        dx: ballSpeedX,
+        dy: ballSpeedY
+      };
+      
+      const WIN_SCORE = 5;
+      
+      function resetBall(direction) {
+        ball.x = canvas.width / 2;
+        ball.y = canvas.height / 2;
+        ballSpeedX = BALL_SPEED_INITIAL;
+        ballSpeedY = BALL_SPEED_INITIAL;
+        ball.dx = direction * ballSpeedX;
+        ball.dy = (Math.random() > 0.5 ? 1 : -1) * ballSpeedY;
+      }
+      
+      function resetGame() {
+        player.score = 0;
+        computer.score = 0;
+        player.y = canvas.height / 2 - PADDLE_HEIGHT / 2;
+        computer.y = canvas.height / 2 - PADDLE_HEIGHT / 2;
+        resetBall(1);
+        updateScore();
+      }
+      
+      function updateScore() {
+        scoreDisplay.textContent = player.score + ' : ' + computer.score;
+      }
+      
+      function drawRect(x, y, w, h, color) {
+        ctx.fillStyle = color;
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = color;
+        ctx.fillRect(x, y, w, h);
+        ctx.shadowBlur = 0;
+      }
+      
+      function drawBall(x, y, size, color) {
+        ctx.fillStyle = color;
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = color;
+        ctx.fillRect(x - size/2, y - size/2, size, size);
+        ctx.shadowBlur = 0;
+      }
+      
+      function drawNet() {
+        ctx.setLineDash([8, 12]);
+        ctx.strokeStyle = GAME_COLOR;
+        ctx.globalAlpha = 0.3;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(canvas.width / 2, 0);
+        ctx.lineTo(canvas.width / 2, canvas.height);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.globalAlpha = 1;
+      }
+      
+      function draw() {
+        // Clear canvas
+        ctx.fillStyle = BG_COLOR;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        // Draw net
+        drawNet();
+        
+        // Draw paddles
+        drawRect(player.x, player.y, PADDLE_WIDTH, PADDLE_HEIGHT, GAME_COLOR);
+        drawRect(computer.x, computer.y, PADDLE_WIDTH, PADDLE_HEIGHT, GAME_COLOR);
+        
+        // Draw ball
+        drawBall(ball.x, ball.y, BALL_SIZE, GAME_COLOR);
+      }
+      
+      function movePlayer() {
+        player.y += player.dy;
+        
+        // Boundary check
+        if (player.y < 0) player.y = 0;
+        if (player.y + PADDLE_HEIGHT > canvas.height) player.y = canvas.height - PADDLE_HEIGHT;
+      }
+      
+      function moveComputer() {
+        const computerCenter = computer.y + PADDLE_HEIGHT / 2;
+        const targetY = ball.y;
+        
+        // Add some delay/imperfection to AI
+        if (ball.dx > 0) { // Ball moving towards computer
+          if (computerCenter < targetY - 12) {
+            computer.y += computer.speed;
+          } else if (computerCenter > targetY + 12) {
+            computer.y -= computer.speed;
+          }
+        }
+        
+        // Boundary check
+        if (computer.y < 0) computer.y = 0;
+        if (computer.y + PADDLE_HEIGHT > canvas.height) computer.y = canvas.height - PADDLE_HEIGHT;
+      }
+      
+      function moveBall() {
+        ball.x += ball.dx;
+        ball.y += ball.dy;
+        
+        // Top and bottom collision
+        if (ball.y - BALL_SIZE/2 < 0 || ball.y + BALL_SIZE/2 > canvas.height) {
+          ball.dy = -ball.dy;
+          ball.y = ball.y - BALL_SIZE/2 < 0 ? BALL_SIZE/2 : canvas.height - BALL_SIZE/2;
+        }
+        
+        // Paddle collision
+        // Player paddle
+        if (ball.x - BALL_SIZE/2 < player.x + PADDLE_WIDTH &&
+            ball.x + BALL_SIZE/2 > player.x &&
+            ball.y > player.y &&
+            ball.y < player.y + PADDLE_HEIGHT) {
+          ball.dx = Math.abs(ball.dx) * 1.05; // Speed up slightly
+          ball.x = player.x + PADDLE_WIDTH + BALL_SIZE/2;
+          
+          // Add angle based on where ball hits paddle
+          const hitPos = (ball.y - player.y) / PADDLE_HEIGHT;
+          ball.dy = (hitPos - 0.5) * 8;
+        }
+        
+        // Computer paddle
+        if (ball.x + BALL_SIZE/2 > computer.x &&
+            ball.x - BALL_SIZE/2 < computer.x + PADDLE_WIDTH &&
+            ball.y > computer.y &&
+            ball.y < computer.y + PADDLE_HEIGHT) {
+          ball.dx = -Math.abs(ball.dx) * 1.05; // Speed up slightly
+          ball.x = computer.x - BALL_SIZE/2;
+          
+          const hitPos = (ball.y - computer.y) / PADDLE_HEIGHT;
+          ball.dy = (hitPos - 0.5) * 8;
+        }
+        
+        // Scoring
+        if (ball.x < 0) {
+          computer.score++;
+          updateScore();
+          if (computer.score >= WIN_SCORE) {
+            endGame('CPU WINS!');
+          } else {
+            resetBall(1);
+          }
+        }
+        
+        if (ball.x > canvas.width) {
+          player.score++;
+          updateScore();
+          if (player.score >= WIN_SCORE) {
+            endGame('YOU WIN!');
+          } else {
+            resetBall(-1);
+          }
+        }
+      }
+      
+      function endGame(winner) {
+        gameStarted = false;
+        winnerDisplay.textContent = winner;
+        finalScoreDisplay.textContent = player.score + ' : ' + computer.score;
+        gameOverScreen.classList.add('active');
+        cancelAnimationFrame(animationId);
+      }
+      
+      function gameLoop() {
+        if (!gameStarted) return;
+        
+        movePlayer();
+        moveComputer();
+        moveBall();
+        draw();
+        
+        animationId = requestAnimationFrame(gameLoop);
+      }
+      
+      function startGame() {
+        welcomeScreen.classList.add('hidden');
+        gameOverScreen.classList.remove('active');
+        resetGame();
+        gameStarted = true;
+        draw();
+        gameLoop();
+      }
+      
+      // Draw initial state
+      draw();
+      
+      // Event listeners
+      document.addEventListener('keydown', function(e) {
+        if (e.code === 'Space') {
+          e.preventDefault();
+          if (!gameStarted || gameOverScreen.classList.contains('active')) {
+            startGame();
+          }
+        }
+        
+        if (gameStarted) {
+          if (e.code === 'ArrowUp' || e.code === 'KeyW') {
+            player.dy = -PADDLE_SPEED;
+          }
+          if (e.code === 'ArrowDown' || e.code === 'KeyS') {
+            player.dy = PADDLE_SPEED;
+          }
+        }
+      });
+      
+      document.addEventListener('keyup', function(e) {
+        if (e.code === 'ArrowUp' || e.code === 'KeyW' || e.code === 'ArrowDown' || e.code === 'KeyS') {
+          player.dy = 0;
+        }
+      });
+      
+      // Handle window resize - hide game on mobile
+      window.addEventListener('resize', function() {
+        if (window.innerWidth <= 768) {
+          gameStarted = false;
+          cancelAnimationFrame(animationId);
+        }
+      });
     })();
   </script>
