@@ -236,38 +236,55 @@
     }
 
     /* Pong Game Styles - Desktop Only */
-    .pong-section {
-      margin-top: 50px;
-      padding-top: 30px;
-      border-top: 1px solid rgba(51, 255, 0, 0.2);
-    }
-
-    .pong-section-title {
-      font-size: 1.2em;
-      color: var(--text-color);
-      text-shadow: 0 0 5px var(--text-color);
-      margin-bottom: 20px;
-    }
-
     @media (max-width: 768px) {
-      .pong-section {
+      .pong-hint {
         display: none !important;
       }
+      .pong-overlay {
+        display: none !important;
+      }
+    }
+
+    .pong-hint {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(51, 255, 0, 0.2);
+      font-size: 0.95em;
+      color: var(--text-color);
+      opacity: 0.7;
+    }
+
+    .pong-hint span {
+      animation: blink 1s step-end infinite;
+    }
+
+    .pong-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 9, 16, 0.97);
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .pong-overlay.active {
+      display: flex;
     }
 
     .pong-container {
       position: relative;
       border: 2px solid var(--text-color);
       box-shadow: 0 0 20px rgba(51, 255, 0, 0.3), inset 0 0 20px rgba(51, 255, 0, 0.1);
-      max-width: 100%;
-      margin: 0 auto;
     }
 
     #pong-canvas {
       display: block;
       background: var(--background-color);
-      width: 100%;
-      height: auto;
     }
 
     .pong-welcome {
@@ -291,46 +308,61 @@
     }
 
     .pong-title {
-      font-size: 2.5em;
+      font-size: 3em;
       color: var(--text-color);
       text-shadow: 0 0 10px var(--text-color), 0 0 20px var(--text-color);
-      margin-bottom: 20px;
+      margin-bottom: 30px;
       letter-spacing: 0.3em;
     }
 
     .pong-instructions {
-      font-size: 0.95em;
+      font-size: 1em;
       color: var(--text-color);
       opacity: 0.8;
-      margin-bottom: 10px;
+      margin-bottom: 15px;
       line-height: 1.8;
     }
 
     .pong-start-hint {
-      font-size: 1em;
+      font-size: 1.2em;
       color: var(--text-color);
-      margin-top: 25px;
+      margin-top: 30px;
       animation: blink 1s step-end infinite;
     }
 
     .pong-controls {
-      font-size: 0.8em;
+      font-size: 0.85em;
       color: var(--text-color);
       opacity: 0.6;
-      margin-top: 15px;
+      margin-top: 20px;
     }
 
     .pong-score {
       position: absolute;
-      top: 15px;
+      top: 20px;
       left: 50%;
       transform: translateX(-50%);
-      font-size: 1.5em;
+      font-size: 2em;
       color: var(--text-color);
       text-shadow: 0 0 10px var(--text-color);
       opacity: 0.8;
       pointer-events: none;
       z-index: 10;
+    }
+
+    .pong-close {
+      position: absolute;
+      top: -40px;
+      right: 0;
+      color: var(--text-color);
+      font-size: 0.9em;
+      cursor: pointer;
+      opacity: 0.6;
+      transition: opacity 0.3s;
+    }
+
+    .pong-close:hover {
+      opacity: 1;
     }
 
     .pong-game-over {
@@ -352,21 +384,21 @@
     }
 
     .pong-game-over-title {
-      font-size: 2em;
+      font-size: 2.5em;
       color: var(--text-color);
       text-shadow: 0 0 10px var(--text-color);
-      margin-bottom: 15px;
-    }
-
-    .pong-final-score {
-      font-size: 1.2em;
-      color: var(--text-color);
-      opacity: 0.8;
       margin-bottom: 20px;
     }
 
+    .pong-final-score {
+      font-size: 1.5em;
+      color: var(--text-color);
+      opacity: 0.8;
+      margin-bottom: 30px;
+    }
+
     .pong-restart-hint {
-      font-size: 0.9em;
+      font-size: 1em;
       color: var(--text-color);
       animation: blink 1s step-end infinite;
     }
@@ -382,33 +414,36 @@
         href="https://github.com/terryds" target="_blank">github</a> <a href="https://x.com/terry_djony" target="_blank">twitter</a><a href="mailto:hi@terrydjony.com">email</a> </div>
     <div class="bio">I'm a self-taught programmer turned into tech entrepreneur in software industry.<br>Started building startups since college, got into <a href="https://www.ycombinator.com/verify/jyj7tw4iclddid3l" id="flicker-link">YC W21</a>.<br>Also building some indie products MicroSaaS such as Chrome Extensions and Google Workspace Add-ons. Currently exploring AI Agents.<br><br>I also do <a href="https://github.com/terryds">open-source projects</a> in my spare time. Most starred repository is {{project}}<br><br>I write my thoughts on <a href="https://blog.terrydjony.com" target="_blank">my blog</a>, feel free to visit!</div>
     
-    <!-- Pong Game Section (Desktop Only) -->
-    <div class="pong-section" id="pong-section">
-      <div class="pong-section-title">Please enjoy PONG game!</div>
-      <div class="pong-container">
-        <canvas id="pong-canvas" width="760" height="400"></canvas>
-        <div class="pong-score" id="pong-score">0 : 0</div>
-        
-        <!-- Welcome Screen -->
-        <div class="pong-welcome" id="pong-welcome">
-          <div class="pong-title">PONG</div>
-          <div class="pong-instructions">
-            Classic arcade game, terminal edition.<br>
-            First to 5 points wins.
-          </div>
-          <div class="pong-controls">
-            <div>↑ / W - Move paddle up</div>
-            <div>↓ / S - Move paddle down</div>
-          </div>
-          <div class="pong-start-hint">[ PRESS SPACE TO START ]</div>
+    <!-- Pong Game Hint (Desktop Only) -->
+    <div class="pong-hint">Press <span>[ SPACE ]</span> to open a pong game</div>
+  </div>
+  
+  <!-- Pong Game Overlay (Desktop Only) -->
+  <div class="pong-overlay" id="pong-overlay">
+    <div class="pong-container">
+      <div class="pong-close" id="pong-close">[ ESC ] to exit</div>
+      <canvas id="pong-canvas" width="800" height="500"></canvas>
+      <div class="pong-score" id="pong-score">0 : 0</div>
+      
+      <!-- Welcome Screen -->
+      <div class="pong-welcome" id="pong-welcome">
+        <div class="pong-title">PONG</div>
+        <div class="pong-instructions">
+          Please enjoy PONG game!<br>
+          First to 5 points wins.
         </div>
-        
-        <!-- Game Over Screen -->
-        <div class="pong-game-over" id="pong-game-over">
-          <div class="pong-game-over-title" id="pong-winner">GAME OVER</div>
-          <div class="pong-final-score" id="pong-final-score">0 : 0</div>
-          <div class="pong-restart-hint">[ PRESS SPACE TO PLAY AGAIN ]</div>
+        <div class="pong-controls">
+          <div>↑ / W - Move paddle up</div>
+          <div>↓ / S - Move paddle down</div>
         </div>
+        <div class="pong-start-hint">[ PRESS SPACE TO START ]</div>
+      </div>
+      
+      <!-- Game Over Screen -->
+      <div class="pong-game-over" id="pong-game-over">
+        <div class="pong-game-over-title" id="pong-winner">GAME OVER</div>
+        <div class="pong-final-score" id="pong-final-score">0 : 0</div>
+        <div class="pong-restart-hint">[ PRESS SPACE TO PLAY AGAIN ]</div>
       </div>
     </div>
   </div>
@@ -478,6 +513,7 @@
       // Only enable on desktop
       if (window.innerWidth <= 768) return;
       
+      const overlay = document.getElementById('pong-overlay');
       const canvas = document.getElementById('pong-canvas');
       if (!canvas) return;
       
@@ -487,39 +523,41 @@
       const scoreDisplay = document.getElementById('pong-score');
       const winnerDisplay = document.getElementById('pong-winner');
       const finalScoreDisplay = document.getElementById('pong-final-score');
+      const closeBtn = document.getElementById('pong-close');
       
       // Game colors matching the theme
       const GAME_COLOR = '#33ff00';
       const BG_COLOR = '#000910';
       
       // Game state
+      let gameActive = false;
       let gameStarted = false;
       let animationId = null;
       
       // Paddle settings
-      const PADDLE_WIDTH = 10;
-      const PADDLE_HEIGHT = 70;
-      const PADDLE_SPEED = 6;
+      const PADDLE_WIDTH = 12;
+      const PADDLE_HEIGHT = 80;
+      const PADDLE_SPEED = 7;
       
       // Ball settings
-      const BALL_SIZE = 10;
-      const BALL_SPEED_INITIAL = 5;
+      const BALL_SIZE = 12;
+      const BALL_SPEED_INITIAL = 6;
       let ballSpeedX = BALL_SPEED_INITIAL;
       let ballSpeedY = BALL_SPEED_INITIAL;
       
       // Game objects
       let player = {
-        x: 15,
+        x: 20,
         y: canvas.height / 2 - PADDLE_HEIGHT / 2,
         score: 0,
         dy: 0
       };
       
       let computer = {
-        x: canvas.width - 15 - PADDLE_WIDTH,
+        x: canvas.width - 20 - PADDLE_WIDTH,
         y: canvas.height / 2 - PADDLE_HEIGHT / 2,
         score: 0,
-        speed: 3.5
+        speed: 4
       };
       
       let ball = {
@@ -570,7 +608,7 @@
       }
       
       function drawNet() {
-        ctx.setLineDash([8, 12]);
+        ctx.setLineDash([10, 15]);
         ctx.strokeStyle = GAME_COLOR;
         ctx.globalAlpha = 0.3;
         ctx.lineWidth = 2;
@@ -612,9 +650,9 @@
         
         // Add some delay/imperfection to AI
         if (ball.dx > 0) { // Ball moving towards computer
-          if (computerCenter < targetY - 12) {
+          if (computerCenter < targetY - 15) {
             computer.y += computer.speed;
-          } else if (computerCenter > targetY + 12) {
+          } else if (computerCenter > targetY + 15) {
             computer.y -= computer.speed;
           }
         }
@@ -645,7 +683,7 @@
           
           // Add angle based on where ball hits paddle
           const hitPos = (ball.y - player.y) / PADDLE_HEIGHT;
-          ball.dy = (hitPos - 0.5) * 8;
+          ball.dy = (hitPos - 0.5) * 10;
         }
         
         // Computer paddle
@@ -657,7 +695,7 @@
           ball.x = computer.x - BALL_SIZE/2;
           
           const hitPos = (ball.y - computer.y) / PADDLE_HEIGHT;
-          ball.dy = (hitPos - 0.5) * 8;
+          ball.dy = (hitPos - 0.5) * 10;
         }
         
         // Scoring
@@ -691,7 +729,7 @@
       }
       
       function gameLoop() {
-        if (!gameStarted) return;
+        if (!gameActive || !gameStarted) return;
         
         movePlayer();
         moveComputer();
@@ -710,19 +748,39 @@
         gameLoop();
       }
       
-      // Draw initial state
-      draw();
+      function openPong() {
+        if (window.innerWidth <= 768) return;
+        overlay.classList.add('active');
+        gameActive = true;
+        draw();
+      }
+      
+      function closePong() {
+        overlay.classList.remove('active');
+        gameActive = false;
+        gameStarted = false;
+        cancelAnimationFrame(animationId);
+        welcomeScreen.classList.remove('hidden');
+        gameOverScreen.classList.remove('active');
+        resetGame();
+      }
       
       // Event listeners
       document.addEventListener('keydown', function(e) {
         if (e.code === 'Space') {
           e.preventDefault();
-          if (!gameStarted || gameOverScreen.classList.contains('active')) {
+          if (!gameActive) {
+            openPong();
+          } else if (!gameStarted || gameOverScreen.classList.contains('active')) {
             startGame();
           }
         }
         
-        if (gameStarted) {
+        if (e.code === 'Escape' && gameActive) {
+          closePong();
+        }
+        
+        if (gameActive && gameStarted) {
           if (e.code === 'ArrowUp' || e.code === 'KeyW') {
             player.dy = -PADDLE_SPEED;
           }
@@ -738,11 +796,19 @@
         }
       });
       
-      // Handle window resize - hide game on mobile
+      closeBtn.addEventListener('click', closePong);
+      
+      // Close on click outside game container
+      overlay.addEventListener('click', function(e) {
+        if (e.target === overlay) {
+          closePong();
+        }
+      });
+      
+      // Handle window resize
       window.addEventListener('resize', function() {
-        if (window.innerWidth <= 768) {
-          gameStarted = false;
-          cancelAnimationFrame(animationId);
+        if (window.innerWidth <= 768 && gameActive) {
+          closePong();
         }
       });
     })();
