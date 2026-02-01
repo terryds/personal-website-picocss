@@ -187,6 +187,13 @@
       margin-bottom: 30px
     }
 
+    .highlight-stars {
+      background: linear-gradient(transparent 60%, rgba(51, 255, 0, 0.3) 60%);
+      padding: 0 2px;
+      font-weight: 500;
+      text-shadow: 0 0 8px var(--text-color);
+    }
+
     .publications {
       margin-top: 30px
     }
@@ -499,7 +506,7 @@
               var text = '<a href="' + url + '" target="_blank">' + escapeHtml(name) + ' (' + stars + ' ' + (stars === 1 ? 'star' : 'stars') + ')' + '</a>';
               var bio = document.querySelector('.bio');
               if (!bio) return;
-              bio.innerHTML = bio.innerHTML.replace('{{total_stars}}', totalStars.toLocaleString());
+              bio.innerHTML = bio.innerHTML.replace('{{total_stars}}', '<span class="highlight-stars">' + totalStars.toLocaleString() + '</span>');
               bio.innerHTML = bio.innerHTML.replace('{{project}}', text);
             })
             .catch(function () { /* ignore */ });
