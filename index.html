@@ -412,7 +412,7 @@
     <div class="links"><a
       href="https://blog.terrydjony.com" target="_blank">blog</a><a href="https://news.ycombinator.com/submitted?id=terryds" target="_blank">hackernews</a><a href="https://www.ycombinator.com/verify/jyj7tw4iclddid3l" target="_blank">YC</a> <a
         href="https://github.com/terryds" target="_blank">github</a> <a href="https://x.com/terry_djony" target="_blank">twitter</a><a href="mailto:hi@terrydjony.com">email</a> </div>
-    <div class="bio">I'm a self-taught programmer turned into tech entrepreneur in software industry.<br>Started building startups since college, got into <a href="https://www.ycombinator.com/verify/jyj7tw4iclddid3l" id="flicker-link">YC W21</a>.<br>Also building some indie products MicroSaaS such as Chrome Extensions and Google Workspace Add-ons. Currently exploring AI Agents.<br><br>I also do <a href="https://github.com/terryds">open-source projects</a> in my spare time. Most starred repository is {{project}}<br><br>I write my thoughts on <a href="https://blog.terrydjony.com" target="_blank">my blog</a>, feel free to visit!</div>
+    <div class="bio">I'm a self-taught programmer turned into tech entrepreneur in software industry.<br>Started building startups since college, got into <a href="https://www.ycombinator.com/verify/jyj7tw4iclddid3l" id="flicker-link">YC W21</a>.<br>Also building some indie products MicroSaaS such as Chrome Extensions and Google Workspace Add-ons. Currently exploring AI Agents.<br><br>I also do <a href="https://github.com/terryds">open-source projects</a> in my spare time. I have collected {{total_stars}} stars in Github. Most starred repository is {{project}}<br><br>I write my thoughts on <a href="https://blog.terrydjony.com" target="_blank">my blog</a>, feel free to visit!</div>
     
     <!-- Pong Game Hint (Desktop Only) -->
     <div class="pong-hint">Press <span>[ SPACE ]</span> to open a pong game</div>
@@ -480,6 +480,12 @@
             .then(function (r) { return r.json(); })
             .then(function (repos) {
               if (!Array.isArray(repos)) return;
+              
+              // Calculate total stars
+              var totalStars = repos.reduce(function (sum, repo) {
+                return sum + ((repo && repo.stargazers_count) || 0);
+              }, 0);
+              
               repos.sort(function (a, b) {
                 var sa = (a && a.stargazers_count) || 0;
                 var sb = (b && b.stargazers_count) || 0;
@@ -493,6 +499,7 @@
               var text = '<a href="' + url + '" target="_blank">' + escapeHtml(name) + ' (' + stars + ' ' + (stars === 1 ? 'star' : 'stars') + ')' + '</a>';
               var bio = document.querySelector('.bio');
               if (!bio) return;
+              bio.innerHTML = bio.innerHTML.replace('{{total_stars}}', totalStars.toLocaleString());
               bio.innerHTML = bio.innerHTML.replace('{{project}}', text);
             })
             .catch(function () { /* ignore */ });
