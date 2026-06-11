@@ -1,829 +1,639 @@
-<!doctypehtml>
-  <html lang="en">
+<!DOCTYPE html>
+<html lang="en">
+<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Terry Djony — self-taught programmer turned tech entrepreneur (YC W21). Indie MicroSaaS, Chrome Extensions, Google Workspace Add-ons, AI Agents.">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#000910">
   <title>Terry Djony</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' fill='%23000910'/><rect x='4' y='3' width='8' height='11' fill='%2333ff00'/></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     :root {
-      --background-color: #000910;
-      --text-color: #33ff00;
-      --link-color: #33ff00;
-      --link-hover-color: #001220
+      --bg: #000910;
+      --green: #33ff00;
+      --green-dim: rgba(51, 255, 0, .6);
+      --green-faint: rgba(51, 255, 0, .35);
+      --hover-text: #001220;
     }
+
+    * { box-sizing: border-box; }
+
+    html, body { margin: 0; }
 
     body {
-      background-color: var(--background-color);
-      color: var(--text-color);
+      background: var(--bg);
+      color: var(--green);
       font-family: 'IBM Plex Mono', monospace;
-      line-height: 1.6;
-      padding: 20px;
-      max-width: 800px;
-      margin: 0 auto;
-      position: relative;
-      overflow-x: hidden
+      font-size: 15px;
+      line-height: 1.7;
+      text-shadow: 0 0 2px rgba(51, 255, 0, .3);
+      animation: crt-on .6s ease-out;
     }
 
-    .crt-overlay::before {
-      content: " ";
-      display: block;
-      position: fixed;
-      top: 0;
-      left: 0;
-      bottom: 0;
-      right: 0;
-      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, .25) 50%), linear-gradient(90deg, rgba(255, 0, 0, .06), rgba(0, 255, 0, .02), rgba(0, 0, 255, .06));
-      z-index: 2;
-      background-size: 100% 2px, 3px 100%;
-      pointer-events: none
+    ::selection {
+      background: var(--green);
+      color: var(--bg);
+      text-shadow: none;
     }
 
-    .crt-overlay::after {
+    @keyframes crt-on {
+      0%   { transform: scale(1, .005); filter: brightness(6); }
+      55%  { transform: scale(1, 1.01); filter: brightness(1.8); }
+      100% { transform: scale(1, 1);    filter: brightness(1); }
+    }
+
+    /* subtle CRT texture */
+    body::before {
       content: "";
       position: fixed;
-      top: -50%;
-      left: -50%;
-      right: -50%;
-      bottom: -50%;
-      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise' x='0' y='0'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
-      background-repeat: repeat;
-      background-size: 150px 150px;
-      opacity: .15;
-      z-index: 1000;
+      inset: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, .18) 50%);
+      background-size: 100% 2px;
       pointer-events: none;
-      animation: move 8s linear infinite
+      z-index: 2;
     }
 
-    @keyframes move {
-      0% {
-        transform: translate(0, 0)
-      }
-
-      100% {
-        transform: translate(150px, 150px)
-      }
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse at center, transparent 60%, rgba(0, 0, 0, .4) 100%);
+      pointer-events: none;
+      z-index: 3;
     }
 
-    .container {
-      padding: 20px;
+    #city {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    main {
+      max-width: 620px;
+      margin: 0 auto;
+      min-height: 100vh;
+      padding: 48px 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
       position: relative;
-      z-index: 1
+      z-index: 1;
+    }
+
+    main > * {
+      animation: appear .5s ease-out backwards;
+    }
+
+    main > *:nth-child(1) { animation-delay: .1s; }
+    main > *:nth-child(2) { animation-delay: .18s; }
+    main > *:nth-child(3) { animation-delay: .26s; }
+    main > *:nth-child(4) { animation-delay: .34s; }
+    main > *:nth-child(5) { animation-delay: .42s; }
+    main > *:nth-child(6) { animation-delay: .5s; }
+    main > *:nth-child(7) { animation-delay: .58s; }
+    main > *:nth-child(8) { animation-delay: .66s; }
+
+    @keyframes appear {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: none; }
     }
 
     h1 {
-      color: var(--text-color);
-      margin-bottom: 15px;
-      text-shadow: 0 0 5px var(--text-color);
-      display: inline;
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 3em;
+      font-size: clamp(2em, 7vw, 2.8em);
       font-weight: 400;
-      font-style: normal
+      margin: 0;
+      text-shadow: 0 0 5px var(--green);
+      letter-spacing: .02em;
     }
 
-    .name-container {
-      margin-bottom: 40px
+    h1 .blink {
+      animation: blink 1s step-end infinite;
     }
 
-    a {
-      color: var(--link-color);
-      text-decoration: none
+    @keyframes blink { 50% { opacity: 0; } }
+
+    .glitch { animation: char-flicker .2s ease-in-out; }
+
+    @keyframes char-flicker {
+      0%   { opacity: 1; }
+      25%  { opacity: .3; }
+      50%  { opacity: .8; }
+      75%  { opacity: .1; }
+      100% { opacity: 1; }
     }
 
-    a:hover {
-      text-decoration: none
+    .sub {
+      color: var(--green-dim);
+      margin: 4px 0 0;
     }
 
-    .links {
-      margin-bottom: 30px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px
-    }
+    .bio { margin: 28px 0 0; }
+    .bio + .bio { margin-top: 16px; }
 
-    .bio a,
-    .links a {
-      border: 1px solid var(--link-color);
-      padding: 2px 4px;
+    a { color: var(--green); text-decoration: none; }
+
+    .bio a, .links a {
+      border: 1px solid var(--green);
+      padding: 1px 5px;
       position: relative;
       display: inline-block;
-      transition: color .3s
+      line-height: 1.5;
+      transition: color .3s;
+      z-index: 0;
     }
 
-    .bio a::before,
-    .links a::before {
+    .bio a::before, .links a::before {
       content: "";
       position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: var(--link-color);
+      inset: 0;
+      background: var(--green);
       opacity: 0;
-      transition: opacity .3s;
-      z-index: -1
+      z-index: -1;
     }
 
-    .bio a:hover::before,
-    .flicker-active::before,
-    .links a:hover::before {
-      animation: erratic-flicker .5s steps(10, end) forwards
+    .bio a:hover::before, .links a:hover::before, .flicker-active::before {
+      animation: erratic-flicker .5s steps(10, end) forwards;
+    }
+
+    .bio a:hover, .links a:hover, .flicker-active {
+      color: var(--hover-text);
+      text-shadow: none;
     }
 
     @keyframes erratic-flicker {
-      0% {
-        opacity: 0
-      }
-
-      10% {
-        opacity: .3
-      }
-
-      20% {
-        opacity: 0
-      }
-
-      30% {
-        opacity: .8
-      }
-
-      40% {
-        opacity: .1
-      }
-
-      50% {
-        opacity: .5
-      }
-
-      60% {
-        opacity: .2
-      }
-
-      70% {
-        opacity: .9
-      }
-
-      80% {
-        opacity: .4
-      }
-
-      100%,
-      90% {
-        opacity: .7
-      }
+      0%   { opacity: 0; }
+      10%  { opacity: .3; }
+      20%  { opacity: 0; }
+      30%  { opacity: .8; }
+      40%  { opacity: .1; }
+      50%  { opacity: .5; }
+      60%  { opacity: .2; }
+      70%  { opacity: .9; }
+      80%  { opacity: .4; }
+      90%, 100% { opacity: .7; }
     }
 
-    .bio a:hover,
-    .flicker-active,
-    .links a:hover {
-      color: var(--link-hover-color)
+    .stars {
+      color: var(--green-dim);
+      margin: 24px 0 0;
+      min-height: 1.7em;
     }
 
-    .bio {
-      margin-bottom: 30px
-    }
-
-    .highlight-stars {
-      background: linear-gradient(transparent 60%, rgba(51, 255, 0, 0.3) 60%);
-      padding: 0 2px;
+    .stars b {
+      color: var(--green);
       font-weight: 500;
-      text-shadow: 0 0 8px var(--text-color);
+      background: linear-gradient(transparent 60%, rgba(51, 255, 0, .3) 60%);
+      padding: 0 2px;
+      text-shadow: 0 0 8px var(--green);
     }
 
-    .publications {
-      margin-top: 30px
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 32px 0 0;
     }
 
-    .blink {
-      animation: blink 1s step-end infinite;
-      vertical-align: baseline;
-      color: var(--text-color);
-      text-shadow: 0 0 5px var(--text-color);
-      display: inline;
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 3em;
-      font-weight: 400;
-      font-style: normal
-    }
+    /* ---- the prompt ---- */
 
-    @keyframes blink {
-      50% {
-        opacity: 0
-      }
-    }
-
-    .glitch {
-      animation: char-flicker .2s ease-in-out
-    }
-
-    @keyframes char-flicker {
-      0% {
-        opacity: 1
-      }
-
-      25% {
-        opacity: .3
-      }
-
-      50% {
-        opacity: .8
-      }
-
-      75% {
-        opacity: .1
-      }
-
-      100% {
-        opacity: 1
-      }
-    }
-
-    /* Pong Game Styles - Desktop Only */
-    @media (max-width: 768px) {
-      .pong-hint {
-        display: none !important;
-      }
-      .pong-overlay {
-        display: none !important;
-      }
-    }
-
-    .pong-hint {
-      margin-top: 40px;
+    .prompt-area {
+      margin-top: 56px;
       padding-top: 20px;
-      border-top: 1px solid rgba(51, 255, 0, 0.2);
-      font-size: 0.95em;
-      color: var(--text-color);
-      opacity: 0.7;
+      border-top: 1px solid rgba(51, 255, 0, .18);
+      cursor: text;
     }
 
-    .pong-hint span {
+    .ps1 { color: var(--green-dim); }
+    .ps1 b { color: var(--green); font-weight: 400; }
+
+    .cursor {
+      display: inline-block;
       animation: blink 1s step-end infinite;
+      text-shadow: 0 0 5px var(--green);
     }
 
-    .pong-overlay {
-      display: none;
+    #cmd-input {
+      position: absolute;
+      width: 1px; height: 1px;
+      opacity: 0;
+      border: none; padding: 0;
+      font-size: 16px; /* prevents iOS zoom */
+    }
+
+    .hint {
+      color: var(--green-faint);
+      font-size: .9em;
+      margin: 8px 0 0;
+    }
+
+    .hint .cmd {
+      color: var(--green-dim);
+      border-bottom: 1px dashed var(--green-faint);
+      cursor: pointer;
+    }
+
+    .hint .cmd:hover { color: var(--green); }
+
+    #out {
+      color: var(--green-dim);
+      font-size: .9em;
+      margin: 8px 0 0;
+      min-height: 1.7em;
+      overflow-wrap: break-word;
+    }
+
+    #out a { color: var(--green); border-bottom: 1px dashed var(--green-faint); }
+
+    /* ---- game overlay ---- */
+
+    .game-overlay {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 9, 16, 0.97);
-      z-index: 9999;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-    }
-
-    .pong-overlay.active {
-      display: flex;
-    }
-
-    .pong-container {
-      position: relative;
-      border: 2px solid var(--text-color);
-      box-shadow: 0 0 20px rgba(51, 255, 0, 0.3), inset 0 0 20px rgba(51, 255, 0, 0.1);
-    }
-
-    #pong-canvas {
-      display: block;
-      background: var(--background-color);
-    }
-
-    .pong-welcome {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      background: rgba(0, 9, 16, 0.9);
-      text-align: center;
-      padding: 20px;
-      box-sizing: border-box;
-    }
-
-    .pong-welcome.hidden {
+      inset: 0;
       display: none;
-    }
-
-    .pong-title {
-      font-size: 3em;
-      color: var(--text-color);
-      text-shadow: 0 0 10px var(--text-color), 0 0 20px var(--text-color);
-      margin-bottom: 30px;
-      letter-spacing: 0.3em;
-    }
-
-    .pong-instructions {
-      font-size: 1em;
-      color: var(--text-color);
-      opacity: 0.8;
-      margin-bottom: 15px;
-      line-height: 1.8;
-    }
-
-    .pong-start-hint {
-      font-size: 1.2em;
-      color: var(--text-color);
-      margin-top: 30px;
-      animation: blink 1s step-end infinite;
-    }
-
-    .pong-controls {
-      font-size: 0.85em;
-      color: var(--text-color);
-      opacity: 0.6;
-      margin-top: 20px;
-    }
-
-    .pong-score {
-      position: absolute;
-      top: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 2em;
-      color: var(--text-color);
-      text-shadow: 0 0 10px var(--text-color);
-      opacity: 0.8;
-      pointer-events: none;
+      justify-content: center;
+      align-items: center;
+      background: rgba(0, 9, 16, .96);
       z-index: 10;
     }
 
-    .pong-close {
-      position: absolute;
-      top: -40px;
-      right: 0;
-      color: var(--text-color);
-      font-size: 0.9em;
-      cursor: pointer;
-      opacity: 0.6;
-      transition: opacity 0.3s;
-    }
+    .game-overlay.active { display: flex; }
 
-    .pong-close:hover {
-      opacity: 1;
-    }
-
-    .pong-game-over {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      display: none;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      background: rgba(0, 9, 16, 0.9);
-      text-align: center;
-    }
-
-    .pong-game-over.active {
+    .game-box {
       display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: center;
     }
 
-    .pong-game-over-title {
-      font-size: 2.5em;
-      color: var(--text-color);
-      text-shadow: 0 0 10px var(--text-color);
-      margin-bottom: 20px;
+    #game-frame {
+      width: min(420px, 92vw);
+      height: min(600px, 78vh);
+      border: 1px solid var(--green);
+      box-shadow: 0 0 24px rgba(51, 255, 0, .25);
+      background: #000;
     }
 
-    .pong-final-score {
-      font-size: 1.5em;
-      color: var(--text-color);
-      opacity: 0.8;
-      margin-bottom: 30px;
+    .game-close {
+      background: none;
+      border: none;
+      font-family: inherit;
+      font-size: .85em;
+      color: var(--green-dim);
+      cursor: pointer;
     }
 
-    .pong-restart-hint {
-      font-size: 1em;
-      color: var(--text-color);
-      animation: blink 1s step-end infinite;
+    .game-close:hover { color: var(--green); }
+
+    @media (prefers-reduced-motion: reduce) {
+      body, main > *, .cursor, h1 .blink, .glitch { animation: none !important; }
     }
   </style>
-  <div class="crt-overlay"></div>
-  
-  <div class="container">
-    <div class="name-container">
-      <h1 id="name">Terry Djony</h1><span class="blink">_</span>
-    </div>
-    <div class="links"><a
-      href="https://blog.terrydjony.com" target="_blank">blog</a><a href="https://news.ycombinator.com/submitted?id=terryds" target="_blank">hackernews</a><a href="https://www.ycombinator.com/verify/jyj7tw4iclddid3l" target="_blank">YC</a> <a
-        href="https://github.com/terryds" target="_blank">github</a> <a href="https://x.com/terry_djony" target="_blank">twitter</a><a href="mailto:hi@terrydjony.com">email</a> </div>
-    <div class="bio">I'm a self-taught programmer turned into tech entrepreneur in software industry.<br>Started building startups since college, got into <a href="https://www.ycombinator.com/verify/jyj7tw4iclddid3l" id="flicker-link">YC W21</a>.<br>Also building some indie products MicroSaaS such as Chrome Extensions and Google Workspace Add-ons. Currently exploring AI Agents.<br><br>I also do <a href="https://github.com/terryds">open-source projects</a> in my spare time. I have collected {{total_stars}} stars in Github. Most starred repository is {{project}}<br><br>I write my thoughts on <a href="https://blog.terrydjony.com" target="_blank">my blog</a>, feel free to visit!</div>
-    
-    <!-- Pong Game Hint (Desktop Only) -->
-    <div class="pong-hint">Press <span>[ SPACE ]</span> to open a pong game</div>
-  </div>
-  
-  <!-- Pong Game Overlay (Desktop Only) -->
-  <div class="pong-overlay" id="pong-overlay">
-    <div class="pong-container">
-      <div class="pong-close" id="pong-close">[ ESC ] to exit</div>
-      <canvas id="pong-canvas" width="800" height="500"></canvas>
-      <div class="pong-score" id="pong-score">0 : 0</div>
-      
-      <!-- Welcome Screen -->
-      <div class="pong-welcome" id="pong-welcome">
-        <div class="pong-title">PONG</div>
-        <div class="pong-instructions">
-          Please enjoy PONG game!<br>
-          First to 5 points wins.
-        </div>
-        <div class="pong-controls">
-          <div>↑ / W - Move paddle up</div>
-          <div>↓ / S - Move paddle down</div>
-        </div>
-        <div class="pong-start-hint">[ PRESS SPACE TO START ]</div>
+</head>
+<body>
+  <canvas id="city" aria-hidden="true"></canvas>
+  <main>
+    <h1><span id="name">Terry Djony</span><span class="blink">_</span></h1>
+    <p class="sub">self-taught programmer · tech entrepreneur · YC W21</p>
+
+    <p class="bio">I'm a self-taught programmer turned tech entrepreneur. Started building
+      startups in college — got into <a href="https://www.ycombinator.com/verify/jyj7tw4iclddid3l"
+      target="_blank" rel="noopener" id="yc-link">YC W21</a>.</p>
+
+    <p class="bio">These days I ship indie MicroSaaS — Chrome Extensions and Google Workspace
+      Add-ons — and I'm currently exploring AI Agents.</p>
+
+    <p class="bio">I do <a href="https://github.com/terryds" target="_blank" rel="noopener">open-source</a>
+      in my spare time, and write my thoughts on
+      <a href="https://blog.terrydjony.com" target="_blank" rel="noopener">my blog</a> — feel free to visit.</p>
+
+    <p class="stars" id="gh-line"></p>
+
+    <nav class="links">
+      <a href="https://blog.terrydjony.com" target="_blank" rel="noopener">blog</a>
+      <a href="https://news.ycombinator.com/submitted?id=terryds" target="_blank" rel="noopener">hackernews</a>
+      <a href="https://www.ycombinator.com/verify/jyj7tw4iclddid3l" target="_blank" rel="noopener">YC</a>
+      <a href="https://github.com/terryds" target="_blank" rel="noopener">github</a>
+      <a href="https://x.com/terry_djony" target="_blank" rel="noopener">twitter</a>
+      <a href="mailto:hi@terrydjony.com">email</a>
+    </nav>
+
+    <div class="prompt-area" id="prompt-area">
+      <div>
+        <span class="ps1"><b>terry@djony</b>:~$ </span><span id="typed"></span><span class="cursor">█</span>
+        <input id="cmd-input" aria-label="command input" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">
       </div>
-      
-      <!-- Game Over Screen -->
-      <div class="pong-game-over" id="pong-game-over">
-        <div class="pong-game-over-title" id="pong-winner">GAME OVER</div>
-        <div class="pong-final-score" id="pong-final-score">0 : 0</div>
-        <div class="pong-restart-hint">[ PRESS SPACE TO PLAY AGAIN ]</div>
-      </div>
+      <p class="hint">type '<span class="cmd" id="game-hint">game</span>' to play 2048</p>
+      <p id="out"></p>
+    </div>
+  </main>
+
+  <div class="game-overlay" id="game-overlay">
+    <div class="game-box">
+      <iframe id="game-frame" title="2048 — Ebitengine example game" allow="autoplay"></iframe>
+      <button class="game-close" id="game-close" type="button">[ ESC to exit ]</button>
     </div>
   </div>
-  <script>function glitchName() { let e = document.getElementById("name"), t = e.textContent; var i = Math.floor(Math.random() * t.length), n = t.slice(0, i), l = `<span class="glitch">${t[i]}</span>`, i = t.slice(i + 1), n = (e.innerHTML = n + l + i, setTimeout(() => { e.textContent = t }, 200), Math.floor(4e3 * Math.random()) + 1e3); setTimeout(glitchName, n) } function flickerHiringLink() { let e = document.getElementById("flicker-link"); Math.random() < .05 && (e.classList.add("flicker-active"), setTimeout(() => { e.classList.remove("flicker-active") }, 500)), setTimeout(flickerHiringLink, 200) } glitchName(), flickerHiringLink()</script>
+
   <script>
+  (function () {
+    'use strict';
+
+    var $ = function (s) { return document.querySelector(s); };
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+    }
+
+    // ---- cyberpunk skyline ----
     (function () {
-      function updateProjects() {
-        try {
-          var links = document.querySelector('.links');
-          if (!links) return;
-          var anchors = links.querySelectorAll('a');
-          var githubHref = null;
-          for (var i = 0; i < anchors.length; i++) {
-            if (anchors[i].href && anchors[i].href.indexOf('github.com/') !== -1) {
-              githubHref = anchors[i].href;
-              break;
+      var REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var cv = $('#city');
+      var cx = cv.getContext('2d');
+      var dpr, W, H, layers, flyer = null;
+
+      // far → near: taller/dimmer to shorter/brighter, drifting at parallax speeds (px/s)
+      var LAYER_DEFS = [
+        { speed: 1.2, minH: .16, maxH: .34, fill: '#021109', winAlpha: .10, density: .45 },
+        { speed: 2.6, minH: .10, maxH: .24, fill: '#01140b', winAlpha: .17, density: .55 },
+        { speed: 4.6, minH: .05, maxH: .14, fill: '#000d07', winAlpha: .24, density: .65 }
+      ];
+
+      function buildLayer(def) {
+        var lw = Math.max(Math.ceil(W * 1.5), 1200);
+        var off = document.createElement('canvas');
+        off.width = lw * dpr;
+        off.height = H * dpr;
+        var c = off.getContext('2d');
+        c.scale(dpr, dpr);
+        var flickers = [];
+        var beacons = [];
+        var x = 0;
+        while (x < lw) {
+          var bw = 26 + Math.random() * 70;
+          var bh = (def.minH + Math.random() * (def.maxH - def.minH)) * H;
+          var by = H - bh;
+          c.fillStyle = def.fill;
+          c.fillRect(x, by, bw, bh);
+          c.fillStyle = 'rgba(51,255,0,.07)';
+          c.fillRect(x, by, bw, 1); // rooftop edge catch-light
+          for (var wx = x + 4; wx < x + bw - 5; wx += 7) {
+            for (var wy = by + 5; wy < H - 8; wy += 10) {
+              if (Math.random() < def.density * .45) {
+                var a = def.winAlpha * (.4 + Math.random() * .9);
+                c.fillStyle = Math.random() < .04
+                  ? 'rgba(255,176,0,' + a + ')'
+                  : 'rgba(51,255,0,' + a + ')';
+                c.fillRect(wx, wy, 3, 4);
+                if (Math.random() < .06) {
+                  flickers.push({ x: wx, y: wy, ph: Math.random() * 6.28, sp: .5 + Math.random() * 2 });
+                }
+              }
             }
           }
-          if (!githubHref) return;
-          var match = githubHref.match(/github\.com\/([^\/\?#]+)/i);
-          var username = match && match[1];
-          if (!username) return;
-
-          function escapeHtml(str) {
-            return String(str)
-              .replace(/&/g, '&amp;')
-              .replace(/</g, '&lt;')
-              .replace(/>/g, '&gt;')
-              .replace(/"/g, '&quot;')
-              .replace(/'/g, '&#039;');
+          if (bh > H * .2 && Math.random() < .4) {
+            var ax = Math.round(x + bw / 2) + .5;
+            c.strokeStyle = 'rgba(51,255,0,.22)';
+            c.lineWidth = 1;
+            c.beginPath();
+            c.moveTo(ax, by);
+            c.lineTo(ax, by - 13);
+            c.stroke();
+            beacons.push({ x: ax, y: by - 15, ph: Math.random() * 6.28 });
           }
-
-          fetch('https://api.github.com/users/' + username + '/repos?per_page=100')
-            .then(function (r) { return r.json(); })
-            .then(function (repos) {
-              if (!Array.isArray(repos)) return;
-              
-              // Calculate total stars
-              var totalStars = repos.reduce(function (sum, repo) {
-                return sum + ((repo && repo.stargazers_count) || 0);
-              }, 0);
-              
-              repos.sort(function (a, b) {
-                var sa = (a && a.stargazers_count) || 0;
-                var sb = (b && b.stargazers_count) || 0;
-                return sb - sa;
-              });
-              var topRepo = repos[0];
-              if (!topRepo) return;
-              var name = topRepo.name || 'repo';
-              var url = (topRepo && topRepo.html_url) ? topRepo.html_url : ('https://github.com/' + username + '/' + name);
-              var stars = topRepo.stargazers_count || 0;
-              var text = '<a href="' + url + '" target="_blank">' + escapeHtml(name) + ' (' + stars + ' ' + (stars === 1 ? 'star' : 'stars') + ')' + '</a>';
-              var bio = document.querySelector('.bio');
-              if (!bio) return;
-              bio.innerHTML = bio.innerHTML.replace('{{total_stars}}', '<span class="highlight-stars">' + totalStars.toLocaleString() + '</span>');
-              bio.innerHTML = bio.innerHTML.replace('{{project}}', text);
-            })
-            .catch(function () { /* ignore */ });
-        } catch (e) { /* ignore */ }
+          x += bw + 3 + Math.random() * 16;
+        }
+        return { off: off, lw: lw, speed: def.speed, fill: def.fill, flickers: flickers, beacons: beacons };
       }
 
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', updateProjects);
+      function setup() {
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        W = window.innerWidth;
+        H = window.innerHeight;
+        cv.width = W * dpr;
+        cv.height = H * dpr;
+        cx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        layers = LAYER_DEFS.map(buildLayer);
+      }
+
+      function draw(t) {
+        cx.clearRect(0, 0, W, H);
+
+        // horizon glow
+        var g = cx.createLinearGradient(0, H * .55, 0, H);
+        g.addColorStop(0, 'rgba(51,255,0,0)');
+        g.addColorStop(1, 'rgba(51,255,0,.05)');
+        cx.fillStyle = g;
+        cx.fillRect(0, H * .55, W, H * .45);
+
+        // occasional aircraft light crossing the upper sky
+        if (!flyer && Math.random() < .0015) {
+          flyer = { y: H * (.08 + Math.random() * .22), v: 25 + Math.random() * 40, born: t };
+        }
+        if (flyer) {
+          var fx = -20 + (t - flyer.born) / 1000 * flyer.v;
+          if (fx > W + 20) {
+            flyer = null;
+          } else {
+            var trail = cx.createLinearGradient(fx - 26, 0, fx, 0);
+            trail.addColorStop(0, 'rgba(51,255,0,0)');
+            trail.addColorStop(1, 'rgba(51,255,0,.25)');
+            cx.fillStyle = trail;
+            cx.fillRect(fx - 26, flyer.y, 26, 1);
+            cx.fillStyle = 'rgba(51,255,0,.55)';
+            cx.fillRect(fx, flyer.y - 1, 2, 2);
+          }
+        }
+
+        for (var i = 0; i < layers.length; i++) {
+          var L = layers[i];
+          var offX = (t / 1000 * L.speed) % L.lw;
+          cx.drawImage(L.off, -offX, 0, L.lw, H);
+          cx.drawImage(L.off, L.lw - offX, 0, L.lw, H);
+
+          // flickering windows: paint them "off" on their building color
+          for (var f = 0; f < L.flickers.length; f++) {
+            var fl = L.flickers[f];
+            var sx = fl.x - offX;
+            if (sx < -4) sx += L.lw;
+            if (sx > W + 4) continue;
+            if (Math.sin(t / 300 * fl.sp + fl.ph) < 0) {
+              cx.fillStyle = L.fill;
+              cx.fillRect(sx - .5, fl.y - .5, 4, 5);
+            }
+          }
+
+          // blinking rooftop beacons
+          for (var b = 0; b < L.beacons.length; b++) {
+            var bc = L.beacons[b];
+            var bx = bc.x - offX;
+            if (bx < -4) bx += L.lw;
+            if (bx > W + 4) continue;
+            var pulse = (Math.sin(t / 700 + bc.ph) + 1) / 2;
+            if (pulse > .55) {
+              cx.fillStyle = 'rgba(255,176,0,' + (pulse * .5) + ')';
+              cx.beginPath();
+              cx.arc(bx, bc.y, 1.4, 0, 6.29);
+              cx.fill();
+            }
+          }
+        }
+      }
+
+      var resizeTimer;
+      window.addEventListener('resize', function () {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function () {
+          setup();
+          if (REDUCED) draw(0);
+        }, 150);
+      });
+
+      setup();
+      if (REDUCED) {
+        draw(0);
       } else {
-        updateProjects();
+        requestAnimationFrame(function frame(t) {
+          draw(t);
+          requestAnimationFrame(frame);
+        });
       }
     })();
-  </script>
-  
-  <!-- Pong Game Script (Desktop Only) -->
-  <script>
-    (function() {
-      // Only enable on desktop
-      if (window.innerWidth <= 768) return;
-      
-      const overlay = document.getElementById('pong-overlay');
-      const canvas = document.getElementById('pong-canvas');
-      if (!canvas) return;
-      
-      const ctx = canvas.getContext('2d');
-      const welcomeScreen = document.getElementById('pong-welcome');
-      const gameOverScreen = document.getElementById('pong-game-over');
-      const scoreDisplay = document.getElementById('pong-score');
-      const winnerDisplay = document.getElementById('pong-winner');
-      const finalScoreDisplay = document.getElementById('pong-final-score');
-      const closeBtn = document.getElementById('pong-close');
-      
-      // Game colors matching the theme
-      const GAME_COLOR = '#33ff00';
-      const BG_COLOR = '#000910';
-      
-      // Game state
-      let gameActive = false;
-      let gameStarted = false;
-      let animationId = null;
-      
-      // Paddle settings
-      const PADDLE_WIDTH = 12;
-      const PADDLE_HEIGHT = 80;
-      const PADDLE_SPEED = 7;
-      
-      // Ball settings
-      const BALL_SIZE = 12;
-      const BALL_SPEED_INITIAL = 6;
-      let ballSpeedX = BALL_SPEED_INITIAL;
-      let ballSpeedY = BALL_SPEED_INITIAL;
-      
-      // Game objects
-      let player = {
-        x: 20,
-        y: canvas.height / 2 - PADDLE_HEIGHT / 2,
-        score: 0,
-        dy: 0
-      };
-      
-      let computer = {
-        x: canvas.width - 20 - PADDLE_WIDTH,
-        y: canvas.height / 2 - PADDLE_HEIGHT / 2,
-        score: 0,
-        speed: 4
-      };
-      
-      let ball = {
-        x: canvas.width / 2,
-        y: canvas.height / 2,
-        dx: ballSpeedX,
-        dy: ballSpeedY
-      };
-      
-      const WIN_SCORE = 5;
-      
-      function resetBall(direction) {
-        ball.x = canvas.width / 2;
-        ball.y = canvas.height / 2;
-        ballSpeedX = BALL_SPEED_INITIAL;
-        ballSpeedY = BALL_SPEED_INITIAL;
-        ball.dx = direction * ballSpeedX;
-        ball.dy = (Math.random() > 0.5 ? 1 : -1) * ballSpeedY;
-      }
-      
-      function resetGame() {
-        player.score = 0;
-        computer.score = 0;
-        player.y = canvas.height / 2 - PADDLE_HEIGHT / 2;
-        computer.y = canvas.height / 2 - PADDLE_HEIGHT / 2;
-        resetBall(1);
-        updateScore();
-      }
-      
-      function updateScore() {
-        scoreDisplay.textContent = player.score + ' : ' + computer.score;
-      }
-      
-      function drawRect(x, y, w, h, color) {
-        ctx.fillStyle = color;
-        ctx.shadowBlur = 10;
-        ctx.shadowColor = color;
-        ctx.fillRect(x, y, w, h);
-        ctx.shadowBlur = 0;
-      }
-      
-      function drawBall(x, y, size, color) {
-        ctx.fillStyle = color;
-        ctx.shadowBlur = 15;
-        ctx.shadowColor = color;
-        ctx.fillRect(x - size/2, y - size/2, size, size);
-        ctx.shadowBlur = 0;
-      }
-      
-      function drawNet() {
-        ctx.setLineDash([10, 15]);
-        ctx.strokeStyle = GAME_COLOR;
-        ctx.globalAlpha = 0.3;
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.moveTo(canvas.width / 2, 0);
-        ctx.lineTo(canvas.width / 2, canvas.height);
-        ctx.stroke();
-        ctx.setLineDash([]);
-        ctx.globalAlpha = 1;
-      }
-      
-      function draw() {
-        // Clear canvas
-        ctx.fillStyle = BG_COLOR;
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        
-        // Draw net
-        drawNet();
-        
-        // Draw paddles
-        drawRect(player.x, player.y, PADDLE_WIDTH, PADDLE_HEIGHT, GAME_COLOR);
-        drawRect(computer.x, computer.y, PADDLE_WIDTH, PADDLE_HEIGHT, GAME_COLOR);
-        
-        // Draw ball
-        drawBall(ball.x, ball.y, BALL_SIZE, GAME_COLOR);
-      }
-      
-      function movePlayer() {
-        player.y += player.dy;
-        
-        // Boundary check
-        if (player.y < 0) player.y = 0;
-        if (player.y + PADDLE_HEIGHT > canvas.height) player.y = canvas.height - PADDLE_HEIGHT;
-      }
-      
-      function moveComputer() {
-        const computerCenter = computer.y + PADDLE_HEIGHT / 2;
-        const targetY = ball.y;
-        
-        // Add some delay/imperfection to AI
-        if (ball.dx > 0) { // Ball moving towards computer
-          if (computerCenter < targetY - 15) {
-            computer.y += computer.speed;
-          } else if (computerCenter > targetY + 15) {
-            computer.y -= computer.speed;
-          }
-        }
-        
-        // Boundary check
-        if (computer.y < 0) computer.y = 0;
-        if (computer.y + PADDLE_HEIGHT > canvas.height) computer.y = canvas.height - PADDLE_HEIGHT;
-      }
-      
-      function moveBall() {
-        ball.x += ball.dx;
-        ball.y += ball.dy;
-        
-        // Top and bottom collision
-        if (ball.y - BALL_SIZE/2 < 0 || ball.y + BALL_SIZE/2 > canvas.height) {
-          ball.dy = -ball.dy;
-          ball.y = ball.y - BALL_SIZE/2 < 0 ? BALL_SIZE/2 : canvas.height - BALL_SIZE/2;
-        }
-        
-        // Paddle collision
-        // Player paddle
-        if (ball.x - BALL_SIZE/2 < player.x + PADDLE_WIDTH &&
-            ball.x + BALL_SIZE/2 > player.x &&
-            ball.y > player.y &&
-            ball.y < player.y + PADDLE_HEIGHT) {
-          ball.dx = Math.abs(ball.dx) * 1.05; // Speed up slightly
-          ball.x = player.x + PADDLE_WIDTH + BALL_SIZE/2;
-          
-          // Add angle based on where ball hits paddle
-          const hitPos = (ball.y - player.y) / PADDLE_HEIGHT;
-          ball.dy = (hitPos - 0.5) * 10;
-        }
-        
-        // Computer paddle
-        if (ball.x + BALL_SIZE/2 > computer.x &&
-            ball.x - BALL_SIZE/2 < computer.x + PADDLE_WIDTH &&
-            ball.y > computer.y &&
-            ball.y < computer.y + PADDLE_HEIGHT) {
-          ball.dx = -Math.abs(ball.dx) * 1.05; // Speed up slightly
-          ball.x = computer.x - BALL_SIZE/2;
-          
-          const hitPos = (ball.y - computer.y) / PADDLE_HEIGHT;
-          ball.dy = (hitPos - 0.5) * 10;
-        }
-        
-        // Scoring
-        if (ball.x < 0) {
-          computer.score++;
-          updateScore();
-          if (computer.score >= WIN_SCORE) {
-            endGame('CPU WINS!');
-          } else {
-            resetBall(1);
-          }
-        }
-        
-        if (ball.x > canvas.width) {
-          player.score++;
-          updateScore();
-          if (player.score >= WIN_SCORE) {
-            endGame('YOU WIN!');
-          } else {
-            resetBall(-1);
-          }
-        }
-      }
-      
-      function endGame(winner) {
-        gameStarted = false;
-        winnerDisplay.textContent = winner;
-        finalScoreDisplay.textContent = player.score + ' : ' + computer.score;
-        gameOverScreen.classList.add('active');
-        cancelAnimationFrame(animationId);
-      }
-      
-      function gameLoop() {
-        if (!gameActive || !gameStarted) return;
-        
-        movePlayer();
-        moveComputer();
-        moveBall();
-        draw();
-        
-        animationId = requestAnimationFrame(gameLoop);
-      }
-      
-      function startGame() {
-        welcomeScreen.classList.add('hidden');
-        gameOverScreen.classList.remove('active');
-        resetGame();
-        gameStarted = true;
-        draw();
-        gameLoop();
-      }
-      
-      function openPong() {
-        if (window.innerWidth <= 768) return;
-        overlay.classList.add('active');
-        gameActive = true;
-        draw();
-      }
-      
-      function closePong() {
-        overlay.classList.remove('active');
-        gameActive = false;
-        gameStarted = false;
-        cancelAnimationFrame(animationId);
-        welcomeScreen.classList.remove('hidden');
-        gameOverScreen.classList.remove('active');
-        resetGame();
-      }
-      
-      // Event listeners
-      document.addEventListener('keydown', function(e) {
-        if (e.code === 'Space') {
-          e.preventDefault();
-          if (!gameActive) {
-            openPong();
-          } else if (!gameStarted || gameOverScreen.classList.contains('active')) {
-            startGame();
-          }
-        }
-        
-        if (e.code === 'Escape' && gameActive) {
-          closePong();
-        }
-        
-        if (gameActive && gameStarted) {
-          if (e.code === 'ArrowUp' || e.code === 'KeyW') {
-            player.dy = -PADDLE_SPEED;
-          }
-          if (e.code === 'ArrowDown' || e.code === 'KeyS') {
-            player.dy = PADDLE_SPEED;
-          }
-        }
-      });
-      
-      document.addEventListener('keyup', function(e) {
-        if (e.code === 'ArrowUp' || e.code === 'KeyW' || e.code === 'ArrowDown' || e.code === 'KeyS') {
-          player.dy = 0;
-        }
-      });
-      
-      closeBtn.addEventListener('click', closePong);
-      
-      // Close on click outside game container
-      overlay.addEventListener('click', function(e) {
-        if (e.target === overlay) {
-          closePong();
-        }
-      });
-      
-      // Handle window resize
-      window.addEventListener('resize', function() {
-        if (window.innerWidth <= 768 && gameActive) {
-          closePong();
-        }
-      });
+
+    // ---- name glitch ----
+    (function glitchName() {
+      var e = $('#name');
+      var t = e.textContent;
+      var i = Math.floor(Math.random() * t.length);
+      e.innerHTML = escapeHtml(t.slice(0, i)) +
+        '<span class="glitch">' + escapeHtml(t[i]) + '</span>' +
+        escapeHtml(t.slice(i + 1));
+      setTimeout(function () { e.textContent = t; }, 200);
+      setTimeout(glitchName, Math.floor(4000 * Math.random()) + 1000);
     })();
+
+    // ---- occasional YC link flicker ----
+    (function flickerYc() {
+      var e = $('#yc-link');
+      if (Math.random() < .05) {
+        e.classList.add('flicker-active');
+        setTimeout(function () { e.classList.remove('flicker-active'); }, 500);
+      }
+      setTimeout(flickerYc, 200);
+    })();
+
+    // ---- live github stars ----
+    fetch('https://api.github.com/users/terryds/repos?per_page=100')
+      .then(function (r) { return r.json(); })
+      .then(function (repos) {
+        if (!Array.isArray(repos)) return;
+        var total = repos.reduce(function (s, r) { return s + ((r && r.stargazers_count) || 0); }, 0);
+        repos.sort(function (a, b) {
+          return ((b && b.stargazers_count) || 0) - ((a && a.stargazers_count) || 0);
+        });
+        var top = repos[0];
+        var html = '<b>★ ' + total.toLocaleString() + '</b> stars on GitHub';
+        if (top) {
+          html += ' · most starred: <a href="' + top.html_url + '" target="_blank" rel="noopener">' +
+            escapeHtml(top.name || 'repo') + '</a> (' + (top.stargazers_count || 0) + ' ★)';
+        }
+        $('#gh-line').innerHTML = html;
+      })
+      .catch(function () { /* stay quiet */ });
+
+    // ---- game overlay (2048, Ebitengine wasm) ----
+    var overlay = $('#game-overlay');
+    var frame = $('#game-frame');
+
+    function openGame() {
+      if (!frame.src) frame.src = 'https://ebitengine.org/_wasm.html?2048';
+      overlay.classList.add('active');
+      frame.focus();
+    }
+
+    function closeGame() {
+      overlay.classList.remove('active');
+    }
+
+    $('#game-close').addEventListener('click', closeGame);
+    overlay.addEventListener('click', function (e) {
+      if (e.target === overlay) closeGame();
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && overlay.classList.contains('active')) closeGame();
+    });
+
+    // ---- the prompt ----
+    var input = $('#cmd-input');
+    var typed = $('#typed');
+    var out = $('#out');
+
+    var LINKS = {
+      blog: 'https://blog.terrydjony.com',
+      github: 'https://github.com/terryds',
+      twitter: 'https://x.com/terry_djony',
+      email: 'mailto:hi@terrydjony.com',
+      yc: 'https://www.ycombinator.com/verify/jyj7tw4iclddid3l',
+      hn: 'https://news.ycombinator.com/submitted?id=terryds'
+    };
+
+    function say(html) { out.innerHTML = html; }
+
+    function run(raw) {
+      var cmd = raw.trim().toLowerCase();
+      if (!cmd) { say(''); return; }
+
+      if (cmd === 'game' || cmd === '2048' || cmd === 'play') {
+        say('spinning up 2048 — ebitengine, compiled to wasm. good luck.');
+        openGame();
+      } else if (cmd === 'help') {
+        say('commands: game · blog · github · twitter · email · yc · hn');
+      } else if (LINKS[cmd]) {
+        say('opening <a href="' + LINKS[cmd] + '" target="_blank" rel="noopener">' + LINKS[cmd] + '</a> …');
+        window.open(LINKS[cmd], '_blank', 'noopener');
+      } else if (cmd === 'sudo hire-me' || cmd === 'sudo hire me') {
+        say('access granted → <a href="mailto:hi@terrydjony.com">hi@terrydjony.com</a>');
+      } else if (cmd === 'whoami') {
+        say('Terry Djony — but you knew that already.');
+      } else if (cmd === 'pong') {
+        say('pong: retired undefeated.');
+      } else {
+        say(escapeHtml(cmd) + ': command not found — try \'game\'');
+      }
+    }
+
+    input.addEventListener('input', function () {
+      typed.textContent = input.value;
+    });
+
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') {
+        var v = input.value;
+        input.value = '';
+        typed.textContent = '';
+        run(v);
+      }
+    });
+
+    $('#prompt-area').addEventListener('click', function (e) {
+      if (e.target.closest('a, .cmd, button')) return;
+      input.focus({ preventScroll: true });
+    });
+
+    $('#game-hint').addEventListener('click', function () { run('game'); });
+
+    if (window.matchMedia('(pointer:fine)').matches) {
+      input.focus({ preventScroll: true });
+    }
+  })();
   </script>
+</body>
+</html>
