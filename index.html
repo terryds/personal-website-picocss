@@ -594,6 +594,7 @@
     let curDialog = 0;
     let isTalking = false;
     let atEnd = false;
+    let audioUnlocked = false;
 
     // Textbox: dark fill, green outline (matches the CRT look)
     const textbox = add([
@@ -647,6 +648,8 @@
     ]);
 
     onButtonPress("next", () => {
+      // First gesture unlocks the AudioContext; from here voice blips are safe.
+      audioUnlocked = true;
       if (isTalking) return;
       if (atEnd) return;
       curDialog++;
@@ -673,7 +676,10 @@
       const len = strippedLength(dialog);
       const writing = loop(0.04, () => {
         txt.letterCount = Math.min(txt.letterCount + 1, len);
-        play("terry_voice", { volume: 0.18 });
+        // Only blip once audio is actually unlocked. Before the first user
+        // gesture the AudioContext is suspended, so these plays would queue
+        // up and then all fire at once on first click — a loud burst.
+        if (audioUnlocked) play("terry_voice", { volume: 0.18 });
         if (txt.letterCount == len) {
           isTalking = false;
           writing.cancel();
