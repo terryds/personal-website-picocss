@@ -1,638 +1,483 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="Terry Djony — self-taught programmer turned tech entrepreneur (YC W21). Indie MicroSaaS, Chrome Extensions, Google Workspace Add-ons, AI Agents.">
-  <meta name="color-scheme" content="dark">
-  <meta name="theme-color" content="#000910">
-  <title>Terry Djony</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' fill='%23000910'/><rect x='4' y='3' width='8' height='11' fill='%2333ff00'/></svg>">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg: #000910;
-      --green: #33ff00;
-      --green-dim: rgba(51, 255, 0, .6);
-      --green-faint: rgba(51, 255, 0, .35);
-      --hover-text: #001220;
-    }
-
-    * { box-sizing: border-box; }
-
-    html, body { margin: 0; }
-
-    body {
-      background: var(--bg);
-      color: var(--green);
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 15px;
-      line-height: 1.7;
-      text-shadow: 0 0 2px rgba(51, 255, 0, .3);
-      animation: crt-on .6s ease-out;
-    }
-
-    ::selection {
-      background: var(--green);
-      color: var(--bg);
-      text-shadow: none;
-    }
-
-    @keyframes crt-on {
-      0%   { transform: scale(1, .005); filter: brightness(6); }
-      55%  { transform: scale(1, 1.01); filter: brightness(1.8); }
-      100% { transform: scale(1, 1);    filter: brightness(1); }
-    }
-
-    /* subtle CRT texture */
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, .18) 50%);
-      background-size: 100% 2px;
-      pointer-events: none;
-      z-index: 2;
-    }
-
-    body::after {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background: radial-gradient(ellipse at center, transparent 60%, rgba(0, 0, 0, .4) 100%);
-      pointer-events: none;
-      z-index: 3;
-    }
-
-    #city {
-      position: fixed;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
-      pointer-events: none;
-    }
-
-    main {
-      max-width: 620px;
-      margin: 0 auto;
-      min-height: 100vh;
-      padding: 48px 24px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      position: relative;
-      z-index: 1;
-    }
-
-    main > * {
-      animation: appear .5s ease-out backwards;
-    }
-
-    main > *:nth-child(1) { animation-delay: .1s; }
-    main > *:nth-child(2) { animation-delay: .18s; }
-    main > *:nth-child(3) { animation-delay: .26s; }
-    main > *:nth-child(4) { animation-delay: .34s; }
-    main > *:nth-child(5) { animation-delay: .42s; }
-    main > *:nth-child(6) { animation-delay: .5s; }
-    main > *:nth-child(7) { animation-delay: .58s; }
-    main > *:nth-child(8) { animation-delay: .66s; }
-
-    @keyframes appear {
-      from { opacity: 0; transform: translateY(6px); }
-      to   { opacity: 1; transform: none; }
-    }
-
-    h1 {
-      font-size: clamp(2em, 7vw, 2.8em);
-      font-weight: 400;
-      margin: 0;
-      text-shadow: 0 0 5px var(--green);
-      letter-spacing: .02em;
-    }
-
-    h1 .blink {
-      animation: blink 1s step-end infinite;
-    }
-
-    @keyframes blink { 50% { opacity: 0; } }
-
-    .glitch { animation: char-flicker .2s ease-in-out; }
-
-    @keyframes char-flicker {
-      0%   { opacity: 1; }
-      25%  { opacity: .3; }
-      50%  { opacity: .8; }
-      75%  { opacity: .1; }
-      100% { opacity: 1; }
-    }
-
-    .sub {
-      color: var(--green-dim);
-      margin: 4px 0 0;
-    }
-
-    .bio { margin: 28px 0 0; }
-    .bio + .bio { margin-top: 16px; }
-
-    a { color: var(--green); text-decoration: none; }
-
-    .bio a, .links a {
-      border: 1px solid var(--green);
-      padding: 1px 5px;
-      position: relative;
-      display: inline-block;
-      line-height: 1.5;
-      transition: color .3s;
-      z-index: 0;
-    }
-
-    .bio a::before, .links a::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: var(--green);
-      opacity: 0;
-      z-index: -1;
-    }
-
-    .bio a:hover::before, .links a:hover::before, .flicker-active::before {
-      animation: erratic-flicker .5s steps(10, end) forwards;
-    }
-
-    .bio a:hover, .links a:hover, .flicker-active {
-      color: var(--hover-text);
-      text-shadow: none;
-    }
-
-    @keyframes erratic-flicker {
-      0%   { opacity: 0; }
-      10%  { opacity: .3; }
-      20%  { opacity: 0; }
-      30%  { opacity: .8; }
-      40%  { opacity: .1; }
-      50%  { opacity: .5; }
-      60%  { opacity: .2; }
-      70%  { opacity: .9; }
-      80%  { opacity: .4; }
-      90%, 100% { opacity: .7; }
-    }
-
-    .stars {
-      color: var(--green-dim);
-      margin: 24px 0 0;
-      min-height: 1.7em;
-    }
-
-    .stars b {
-      color: var(--green);
-      font-weight: 500;
-      background: linear-gradient(transparent 60%, rgba(51, 255, 0, .3) 60%);
-      padding: 0 2px;
-      text-shadow: 0 0 8px var(--green);
-    }
-
-    .links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin: 32px 0 0;
-    }
-
-    /* ---- the prompt ---- */
-
-    .prompt-area {
-      margin-top: 56px;
-      padding-top: 20px;
-      border-top: 1px solid rgba(51, 255, 0, .18);
-      cursor: text;
-    }
-
-    .ps1 { color: var(--green-dim); }
-    .ps1 b { color: var(--green); font-weight: 400; }
-
-    .cursor {
-      display: inline-block;
-      animation: blink 1s step-end infinite;
-      text-shadow: 0 0 5px var(--green);
-    }
-
-    #cmd-input {
-      position: absolute;
-      width: 1px; height: 1px;
-      opacity: 0;
-      border: none; padding: 0;
-      font-size: 16px; /* prevents iOS zoom */
-    }
-
-    .hint {
-      color: var(--green-faint);
-      font-size: .9em;
-      margin: 8px 0 0;
-    }
-
-    .hint .cmd {
-      color: var(--green-dim);
-      border-bottom: 1px dashed var(--green-faint);
-      cursor: pointer;
-    }
-
-    .hint .cmd:hover { color: var(--green); }
-
-    #out {
-      color: var(--green-dim);
-      font-size: .9em;
-      margin: 8px 0 0;
-      min-height: 1.7em;
-      overflow-wrap: break-word;
-    }
-
-    #out a { color: var(--green); border-bottom: 1px dashed var(--green-faint); }
-
-    /* ---- game overlay ---- */
-
-    .game-overlay {
-      position: fixed;
-      inset: 0;
-      display: none;
-      justify-content: center;
-      align-items: center;
-      background: rgba(0, 9, 16, .96);
-      z-index: 10;
-    }
-
-    .game-overlay.active { display: flex; }
-
-    .game-box {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      align-items: center;
-    }
-
-    #game-frame {
-      width: min(420px, 92vw);
-      height: min(600px, 78vh);
-      border: 1px solid var(--green);
-      box-shadow: 0 0 24px rgba(51, 255, 0, .25);
-      background: #000;
-    }
-
-    .game-close {
-      background: none;
-      border: none;
-      font-family: inherit;
-      font-size: .85em;
-      color: var(--green-dim);
-      cursor: pointer;
-    }
-
-    .game-close:hover { color: var(--green); }
-
-    @media (prefers-reduced-motion: reduce) {
-      body, main > *, .cursor, h1 .blink, .glitch { animation: none !important; }
-    }
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Terry Djony</title>
+<style>
+  :root {
+    --bg: #000910;
+    --green: #33ff00;
+    --green-dim: rgba(51, 255, 0, .6);
+  }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--green);
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    min-height: 100%;
+    /* Allow vertical scrolling so the link grid is reachable on short
+       viewports, but never horizontal (matrix bg is position:fixed and
+       handles its own viewport). */
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+  body { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; min-height: 100vh; }
+  /* When the dialog has finished and the link grid is revealed, cap the
+     canvas wrap so all 6 links fit below the fold on mobile without
+     scrolling. */
+  body.show-links #wrap { flex: 0 0 auto; height: 55vh; max-height: 55vh; }
+  body.show-links #hint { display: none; }
+  #matrix-bg {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    pointer-events: none;
+  }
+  /* Scanline overlay, matching the original site */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(rgba(18,16,16,0) 50%, rgba(0,0,0,.18) 50%);
+    background-size: 100% 2px;
+    z-index: 3;
+    mix-blend-mode: overlay;
+  }
+  #wrap {
+    position: relative;
+    z-index: 1;
+    width: 100vw;
+    max-width: 100vw;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  canvas {
+    /* Let kaplay manage canvas dimensions via its internal `letterbox`
+       config. Forcing object-fit:contain at the CSS layer breaks pointer
+       coordinate translation — kaplay assumes the canvas pixels map 1:1
+       to the bounding rect, but object-fit injects margins the engine
+       doesn't know about, so clicks land at wrong internal coords. */
+    display: block;
+    max-width: 100vw;
+    max-height: 100vh;
+    touch-action: manipulation;
+  }
+  #hint {
+    position: relative;
+    z-index: 2;
+    font-size: 12px;
+    color: var(--green-dim);
+    padding: 6px 12px;
+    text-align: center;
+    text-shadow: 0 0 5px var(--green);
+  }
+  /* HTML link grid — rendered outside the kaplay canvas so taps register
+     natively (no canvas-coordinate translation). Hidden until the VN
+     finishes its dialog and calls showLinks(). */
+  #link-grid {
+    position: relative;
+    z-index: 2;
+    display: none;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 10px 14px 18px;
+    max-width: 480px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  #link-grid.show { display: grid; }
+  #link-grid a {
+    display: block;
+    text-align: center;
+    padding: 14px 8px;
+    background: var(--bg);
+    border: 2px solid var(--green);
+    border-radius: 8px;
+    color: var(--green);
+    text-decoration: none;
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 16px;
+    letter-spacing: 0.02em;
+    text-shadow: 0 0 5px var(--green);
+    -webkit-tap-highlight-color: rgba(51, 255, 0, 0.2);
+  }
+  #link-grid a:active { background: rgba(51, 255, 0, 0.15); }
+</style>
 </head>
 <body>
-  <canvas id="city" aria-hidden="true"></canvas>
-  <main>
-    <h1><span id="name">Terry Djony</span><span class="blink">_</span></h1>
-    <p class="sub">self-taught programmer · tech entrepreneur · YC W21</p>
+  <canvas id="matrix-bg"></canvas>
+  <div id="wrap"></div>
+  <div id="hint">Tap to advance · last frame reveals links</div>
+  <nav id="link-grid">
+    <a href="https://blog.terrydjony.com"                                           target="_blank" rel="noopener">blog</a>
+    <a href="https://github.com/terryds"                                            target="_blank" rel="noopener">github</a>
+    <a href="https://x.com/terry_djony"                                             target="_blank" rel="noopener">twitter</a>
+    <a href="mailto:hi@terrydjony.com">email</a>
+    <a href="https://www.ycombinator.com/verify/jyj7tw4iclddid3l"                   target="_blank" rel="noopener">yc</a>
+    <a href="https://news.ycombinator.com/submitted?id=terryds"                     target="_blank" rel="noopener">hackernews</a>
+  </nav>
 
-    <p class="bio">I'm a self-taught programmer turned tech entrepreneur. Started building
-      startups in college — got into <a href="https://www.ycombinator.com/verify/jyj7tw4iclddid3l"
-      target="_blank" rel="noopener" id="yc-link">YC W21</a>.</p>
-
-    <p class="bio">These days I ship indie MicroSaaS — Chrome Extensions and Google Workspace
-      Add-ons — and I'm currently exploring AI Agents.</p>
-
-    <p class="bio">I do <a href="https://github.com/terryds" target="_blank" rel="noopener">open-source</a>
-      in my spare time, and write my thoughts on
-      <a href="https://blog.terrydjony.com" target="_blank" rel="noopener">my blog</a> — feel free to visit.</p>
-
-    <p class="stars" id="gh-line"></p>
-
-    <nav class="links">
-      <a href="https://blog.terrydjony.com" target="_blank" rel="noopener">blog</a>
-      <a href="https://news.ycombinator.com/submitted?id=terryds" target="_blank" rel="noopener">hackernews</a>
-      <a href="https://www.ycombinator.com/verify/jyj7tw4iclddid3l" target="_blank" rel="noopener">YC</a>
-      <a href="https://github.com/terryds" target="_blank" rel="noopener">github</a>
-      <a href="https://x.com/terry_djony" target="_blank" rel="noopener">twitter</a>
-      <a href="mailto:hi@terrydjony.com">email</a>
-    </nav>
-
-    <div class="prompt-area" id="prompt-area">
-      <div>
-        <span class="ps1"><b>terry@djony</b>:~$ </span><span id="typed"></span><span class="cursor">█</span>
-        <input id="cmd-input" aria-label="command input" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">
-      </div>
-      <p class="hint">type '<span class="cmd" id="game-hint">game</span>' to play 2048</p>
-      <p id="out"></p>
-    </div>
-  </main>
-
-  <div class="game-overlay" id="game-overlay">
-    <div class="game-box">
-      <iframe id="game-frame" title="2048 — Ebitengine example game" allow="autoplay"></iframe>
-      <button class="game-close" id="game-close" type="button">[ ESC to exit ]</button>
-    </div>
-  </div>
-
+  <!-- Cyberpunk cityscape background ─────────────────────────────────
+       Three parallax layers of silhouetted buildings scrolling slowly,
+       with flickering matrix-green windows. Drawn on a separate full-
+       viewport canvas behind the (transparent) kaplay canvas. -->
   <script>
-  (function () {
-    'use strict';
+    (function cityscape() {
+      const cv = document.getElementById("matrix-bg");
+      const ctx = cv.getContext("2d");
 
-    var $ = function (s) { return document.querySelector(s); };
-
-    function escapeHtml(str) {
-      return String(str)
-        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;').replace(/'/g, '&#039;');
-    }
-
-    // ---- cyberpunk skyline ----
-    (function () {
-      var REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      var cv = $('#city');
-      var cx = cv.getContext('2d');
-      var dpr, W, H, layers, flyer = null;
-
-      // far → near: taller/dimmer to shorter/brighter, drifting at parallax speeds (px/s)
-      var LAYER_DEFS = [
-        { speed: 1.2, minH: .16, maxH: .34, fill: '#021109', winAlpha: .10, density: .45 },
-        { speed: 2.6, minH: .10, maxH: .24, fill: '#01140b', winAlpha: .17, density: .55 },
-        { speed: 4.6, minH: .05, maxH: .14, fill: '#000d07', winAlpha: .24, density: .65 }
+      // Layer config: 3 parallax layers. Building silhouettes are
+      // near-black so they pop against the cozy night-sky gradient.
+      // Each layer has its own height range, window opacity, and
+      // window-color mix (warm yellows in front, green deeper).
+      const LAYERS = [
+        { speed: 0.005, minH: 140, maxH: 240, color: "#020410", windowAlpha: 0.35, warmMix: 0.2 },
+        { speed: 0.012, minH: 220, maxH: 360, color: "#01020a", windowAlpha: 0.6,  warmMix: 0.5 },
+        { speed: 0.022, minH: 300, maxH: 460, color: "#000005", windowAlpha: 0.9,  warmMix: 0.7 },
       ];
 
-      function buildLayer(def) {
-        var lw = Math.max(Math.ceil(W * 1.5), 1200);
-        var off = document.createElement('canvas');
-        off.width = lw * dpr;
-        off.height = H * dpr;
-        var c = off.getContext('2d');
-        c.scale(dpr, dpr);
-        var flickers = [];
-        var beacons = [];
-        var x = 0;
-        while (x < lw) {
-          var bw = 26 + Math.random() * 70;
-          var bh = (def.minH + Math.random() * (def.maxH - def.minH)) * H;
-          var by = H - bh;
-          c.fillStyle = def.fill;
-          c.fillRect(x, by, bw, bh);
-          c.fillStyle = 'rgba(51,255,0,.07)';
-          c.fillRect(x, by, bw, 1); // rooftop edge catch-light
-          for (var wx = x + 4; wx < x + bw - 5; wx += 7) {
-            for (var wy = by + 5; wy < H - 8; wy += 10) {
-              if (Math.random() < def.density * .45) {
-                var a = def.winAlpha * (.4 + Math.random() * .9);
-                c.fillStyle = Math.random() < .04
-                  ? 'rgba(255,176,0,' + a + ')'
-                  : 'rgba(51,255,0,' + a + ')';
-                c.fillRect(wx, wy, 3, 4);
-                if (Math.random() < .06) {
-                  flickers.push({ x: wx, y: wy, ph: Math.random() * 6.28, sp: .5 + Math.random() * 2 });
+      let buildings = [];
+      let stars = [];
+
+      function regen() {
+        buildings = [];
+        LAYERS.forEach((layer, layerIdx) => {
+          let x = 0;
+          while (x < cv.width * 2 + 200) {
+            const w = 36 + Math.random() * 60;
+            const h = layer.minH + Math.random() * (layer.maxH - layer.minH);
+            const windows = [];
+            const cols = Math.floor((w - 8) / 10);
+            const rows = Math.floor((h - 20) / 14);
+            for (let r = 0; r < rows; r++) {
+              for (let c = 0; c < cols; c++) {
+                if (Math.random() < 0.4) {
+                  // Mix of warm yellow + green windows for cozy night feel
+                  const warm = Math.random() < layer.warmMix;
+                  windows.push({
+                    x: 4 + c * 10,
+                    y: 10 + r * 14,
+                    phase: Math.random() * Math.PI * 2,
+                    speed: 0.4 + Math.random() * 2,
+                    warm,
+                  });
                 }
               }
             }
+            buildings.push({ layerIdx, x, w, h, windows });
+            x += w + 2;
           }
-          if (bh > H * .2 && Math.random() < .4) {
-            var ax = Math.round(x + bw / 2) + .5;
-            c.strokeStyle = 'rgba(51,255,0,.22)';
-            c.lineWidth = 1;
-            c.beginPath();
-            c.moveTo(ax, by);
-            c.lineTo(ax, by - 13);
-            c.stroke();
-            beacons.push({ x: ax, y: by - 15, ph: Math.random() * 6.28 });
-          }
-          x += bw + 3 + Math.random() * 16;
+        });
+
+        // Sky stars — only above the rough silhouette horizon
+        stars = [];
+        const skyTop = 0;
+        const skyBottom = cv.height - 240; // above tallest mid-layer
+        const starCount = Math.floor(cv.width * cv.height / 8000);
+        for (let i = 0; i < starCount; i++) {
+          stars.push({
+            x: Math.random() * cv.width,
+            y: skyTop + Math.random() * (skyBottom - skyTop),
+            size: Math.random() < 0.85 ? 1 : 2,
+            phase: Math.random() * Math.PI * 2,
+            speed: 0.5 + Math.random() * 1.5,
+          });
         }
-        return { off: off, lw: lw, speed: def.speed, fill: def.fill, flickers: flickers, beacons: beacons };
       }
 
-      function setup() {
-        dpr = Math.min(window.devicePixelRatio || 1, 2);
-        W = window.innerWidth;
-        H = window.innerHeight;
-        cv.width = W * dpr;
-        cv.height = H * dpr;
-        cx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        layers = LAYER_DEFS.map(buildLayer);
+      function resize() {
+        cv.width = window.innerWidth;
+        cv.height = window.innerHeight;
+        regen();
       }
+      resize();
+      window.addEventListener("resize", resize);
+      window.addEventListener("orientationchange", resize);
 
-      function draw(t) {
-        cx.clearRect(0, 0, W, H);
+      function step(t) {
+        // Cozy night sky — deep indigo at top, warmer purple-pink near
+        // horizon (city glow). Subtle green tint at the very bottom ties
+        // back to the matrix theme.
+        const grad = ctx.createLinearGradient(0, 0, 0, cv.height);
+        grad.addColorStop(0, "#040518");
+        grad.addColorStop(0.4, "#0d0e2e");
+        grad.addColorStop(0.75, "#1f1238");
+        grad.addColorStop(1, "#2a1535");
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, cv.width, cv.height);
 
-        // horizon glow
-        var g = cx.createLinearGradient(0, H * .55, 0, H);
-        g.addColorStop(0, 'rgba(51,255,0,0)');
-        g.addColorStop(1, 'rgba(51,255,0,.05)');
-        cx.fillStyle = g;
-        cx.fillRect(0, H * .55, W, H * .45);
-
-        // occasional aircraft light crossing the upper sky
-        if (!flyer && Math.random() < .0015) {
-          flyer = { y: H * (.08 + Math.random() * .22), v: 25 + Math.random() * 40, born: t };
-        }
-        if (flyer) {
-          var fx = -20 + (t - flyer.born) / 1000 * flyer.v;
-          if (fx > W + 20) {
-            flyer = null;
-          } else {
-            var trail = cx.createLinearGradient(fx - 26, 0, fx, 0);
-            trail.addColorStop(0, 'rgba(51,255,0,0)');
-            trail.addColorStop(1, 'rgba(51,255,0,.25)');
-            cx.fillStyle = trail;
-            cx.fillRect(fx - 26, flyer.y, 26, 1);
-            cx.fillStyle = 'rgba(51,255,0,.55)';
-            cx.fillRect(fx, flyer.y - 1, 2, 2);
-          }
+        // Stars — small twinkling dots in the upper sky
+        for (const s of stars) {
+          const twinkle = 0.4 + 0.6 * Math.abs(Math.sin(t * 0.001 * s.speed + s.phase));
+          ctx.fillStyle = `rgba(255, 255, 220, ${twinkle * 0.9})`;
+          ctx.fillRect(s.x, s.y, s.size, s.size);
         }
 
-        for (var i = 0; i < layers.length; i++) {
-          var L = layers[i];
-          var offX = (t / 1000 * L.speed) % L.lw;
-          cx.drawImage(L.off, -offX, 0, L.lw, H);
-          cx.drawImage(L.off, L.lw - offX, 0, L.lw, H);
+        // Subtle horizon glow band
+        const glow = ctx.createLinearGradient(0, cv.height * 0.65, 0, cv.height);
+        glow.addColorStop(0, "rgba(255, 150, 50, 0)");
+        glow.addColorStop(1, "rgba(255, 150, 50, 0.08)");
+        ctx.fillStyle = glow;
+        ctx.fillRect(0, cv.height * 0.65, cv.width, cv.height * 0.35);
 
-          // flickering windows: paint them "off" on their building color
-          for (var f = 0; f < L.flickers.length; f++) {
-            var fl = L.flickers[f];
-            var sx = fl.x - offX;
-            if (sx < -4) sx += L.lw;
-            if (sx > W + 4) continue;
-            if (Math.sin(t / 300 * fl.sp + fl.ph) < 0) {
-              cx.fillStyle = L.fill;
-              cx.fillRect(sx - .5, fl.y - .5, 4, 5);
-            }
-          }
+        for (const b of buildings) {
+          const layer = LAYERS[b.layerIdx];
+          const offset = (t * layer.speed) % (cv.width + 100);
+          const drawX = b.x - offset;
+          if (drawX + b.w < 0 || drawX > cv.width) continue;
 
-          // blinking rooftop beacons
-          for (var b = 0; b < L.beacons.length; b++) {
-            var bc = L.beacons[b];
-            var bx = bc.x - offX;
-            if (bx < -4) bx += L.lw;
-            if (bx > W + 4) continue;
-            var pulse = (Math.sin(t / 700 + bc.ph) + 1) / 2;
-            if (pulse > .55) {
-              cx.fillStyle = 'rgba(255,176,0,' + (pulse * .5) + ')';
-              cx.beginPath();
-              cx.arc(bx, bc.y, 1.4, 0, 6.29);
-              cx.fill();
+          const drawY = cv.height - b.h;
+
+          ctx.fillStyle = layer.color;
+          ctx.fillRect(drawX, drawY, b.w, b.h);
+
+          for (const win of b.windows) {
+            const flicker = 0.5 + 0.5 * Math.sin(t * 0.002 * win.speed + win.phase);
+            if (flicker > 0.3) {
+              const alpha = layer.windowAlpha * flicker;
+              ctx.fillStyle = win.warm
+                ? `rgba(255, 200, 90, ${alpha})`     // warm yellow window
+                : `rgba(120, 255, 140, ${alpha})`;   // greenish window
+              ctx.fillRect(drawX + win.x, drawY + win.y, 4, 6);
             }
           }
         }
-      }
 
-      var resizeTimer;
-      window.addEventListener('resize', function () {
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(function () {
-          setup();
-          if (REDUCED) draw(0);
-        }, 150);
+        requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    })();
+  </script>
+
+  <!-- kaplay VN ──────────────────────────────────────────────────────── -->
+  <script type="module">
+    import kaplay from "https://unpkg.com/kaplay@3001.0.18/dist/kaplay.mjs";
+
+    const k = kaplay({
+      // Transparent so the matrix-rain canvas shows through
+      background: [0, 9, 16, 0],
+      width: 640,
+      height: 480,
+      buttons: { next: { keyboard: "space", mouse: "left" } },
+      font: "happy",
+      root: document.getElementById("wrap"),
+      letterbox: true,
+      crisp: true,
+    });
+
+    const {
+      loadSprite, loadSound, loadBitmapFont, add, rect, anchor, pos, outline,
+      text, sprite, scale, center, width, height, onButtonPress, loop, play,
+      onLoad, onLoading, drawRect, drawText, vec2, wave, time, Color, color, rgb,
+    } = k;
+
+    const GREEN = Color.fromHex("#33ff00");
+    const DARK = Color.fromHex("#000910");
+    const GREEN_DIM = Color.fromHex("#0a3a00");
+
+    // ── Matrix-style loading screen ──────────────────────────────────
+    // Overrides kaplay's default loading bar. Drawn each frame during
+    // asset loading. Uses kaplay's default font (the bitmap "happy" font
+    // isn't loaded yet at this point).
+    onLoading((progress) => {
+      drawRect({
+        width: width(),
+        height: height(),
+        color: DARK,
       });
 
-      setup();
-      if (REDUCED) {
-        draw(0);
-      } else {
-        requestAnimationFrame(function frame(t) {
-          draw(t);
-          requestAnimationFrame(frame);
-        });
-      }
-    })();
+      const barW = Math.min(width() * 0.7, 420);
+      const barH = 18;
+      const x = (width() - barW) / 2;
+      const y = height() / 2;
 
-    // ---- name glitch ----
-    (function glitchName() {
-      var e = $('#name');
-      var t = e.textContent;
-      var i = Math.floor(Math.random() * t.length);
-      e.innerHTML = escapeHtml(t.slice(0, i)) +
-        '<span class="glitch">' + escapeHtml(t[i]) + '</span>' +
-        escapeHtml(t.slice(i + 1));
-      setTimeout(function () { e.textContent = t; }, 200);
-      setTimeout(glitchName, Math.floor(4000 * Math.random()) + 1000);
-    })();
+      // Bar frame
+      drawRect({
+        pos: vec2(x, y),
+        width: barW,
+        height: barH,
+        color: DARK,
+        outline: { color: GREEN, width: 2 },
+      });
 
-    // ---- occasional YC link flicker ----
-    (function flickerYc() {
-      var e = $('#yc-link');
-      if (Math.random() < .05) {
-        e.classList.add('flicker-active');
-        setTimeout(function () { e.classList.remove('flicker-active'); }, 500);
-      }
-      setTimeout(flickerYc, 200);
-    })();
+      // Bar fill
+      drawRect({
+        pos: vec2(x, y),
+        width: barW * progress,
+        height: barH,
+        color: GREEN,
+      });
 
-    // ---- live github stars ----
-    fetch('https://api.github.com/users/terryds/repos?per_page=100')
-      .then(function (r) { return r.json(); })
-      .then(function (repos) {
+      // Caption above bar
+      drawText({
+        text: "LOADING " + Math.floor(progress * 100) + "%",
+        pos: vec2(width() / 2, y - 40),
+        size: 28,
+        anchor: "center",
+        color: GREEN,
+      });
+    });
+
+    // Profile photo from blog.terrydjony.com — pre-cropped to a circular
+    // PNG with transparent corners (via ImageMagick) so it renders as a
+    // clean circle in kaplay without a shader.
+    loadSprite("terry", "assets/sprites/terry.png");
+    loadSound("terry_voice", "assets/sounds/bean_voice.wav");
+    loadSound("music", "assets/sounds/moment-of-peace.mp3");
+    loadBitmapFont("happy", "assets/fonts/happy_28x36.png", 28, 36);
+
+    // ── Dialog beats ─────────────────────────────────────────────────
+    // Kept intentionally short (4 beats) so the link grid is only a
+    // handful of taps away.
+    const dialogs = [
+      "[default]Hi, I'm[/default] [name]Terry Djony[/name][default], a tech entrepreneur.[/default]",
+      "[default]I build stuff on the internet.[/default]",
+      // Stars beat — starts as a "..." placeholder; live count is patched
+      // in below once the GitHub fetch resolves.
+      "[default]GitHub total stars:[/default] [yc]★ ...[/yc]",
+      "[yc]YC W21[/yc] [default]alum.[/default]",
+    ];
+    const STARS_BEAT_INDEX = 2;
+
+    // ── Live GitHub stars (matches the original site's /repos fetch) ──
+    // Updates dialog beat #2 in place once the fetch resolves. Stays
+    // silent on failure — the "..." placeholder remains visible.
+    fetch("https://api.github.com/users/terryds/repos?per_page=100")
+      .then((r) => r.json())
+      .then((repos) => {
         if (!Array.isArray(repos)) return;
-        var total = repos.reduce(function (s, r) { return s + ((r && r.stargazers_count) || 0); }, 0);
-        repos.sort(function (a, b) {
-          return ((b && b.stargazers_count) || 0) - ((a && a.stargazers_count) || 0);
-        });
-        var top = repos[0];
-        var html = '<b>★ ' + total.toLocaleString() + '</b> stars on GitHub';
-        if (top) {
-          html += ' · most starred: <a href="' + top.html_url + '" target="_blank" rel="noopener">' +
-            escapeHtml(top.name || 'repo') + '</a> (' + (top.stargazers_count || 0) + ' ★)';
-        }
-        $('#gh-line').innerHTML = html;
+        const total = repos.reduce(
+          (s, r) => s + ((r && r.stargazers_count) || 0),
+          0
+        );
+        dialogs[STARS_BEAT_INDEX] =
+          `[default]GitHub total stars:[/default] [yc]★ ${total}[/yc]`;
       })
-      .catch(function () { /* stay quiet */ });
+      .catch(() => {
+        // leave the placeholder
+      });
 
-    // ---- game overlay (2048, Ebitengine wasm) ----
-    var overlay = $('#game-overlay');
-    var frame = $('#game-frame');
+    let curDialog = 0;
+    let isTalking = false;
+    let atEnd = false;
 
-    function openGame() {
-      if (!frame.src) frame.src = 'https://ebitengine.org/_wasm.html?2048';
-      overlay.classList.add('active');
-      frame.focus();
+    // Textbox: dark fill, green outline (matches the CRT look)
+    const textbox = add([
+      rect(width() - 80, 140, { radius: 4 }),
+      anchor("center"),
+      pos(center().x, height() - 100),
+      color(DARK),
+      outline(4, GREEN),
+    ]);
+
+    const txt = add([
+      text("", {
+        size: 28,
+        width: width() - 130,
+        align: "center",
+        styles: {
+          default: { color: GREEN },
+          name: (idx) => ({
+            color: Color.fromHex("#9bff7a"),
+            pos: vec2(0, wave(-3, 3, time() * 5 + idx * 0.4)),
+          }),
+          yc: (idx) => ({
+            color: Color.fromHex("#ff8a00"),
+            scale: wave(1, 1.15, time() * 2 + idx * 0.3),
+          }),
+          hot: (idx) => ({
+            color: Color.fromHex("#ff3855"),
+            scale: wave(1, 1.2, time() * 3 + idx),
+            angle: wave(-6, 6, time() * 3 + idx),
+          }),
+          ai: (idx) => ({
+            color: Color.fromHex("#62e1ff"),
+            pos: vec2(0, wave(-4, 4, time() * 4 + idx * 0.6)),
+            angle: wave(-4, 4, time() * 2 + idx),
+          }),
+        },
+        transform: (idx) => ({ opacity: idx < txt.letterCount ? 1 : 0 }),
+      }),
+      pos(textbox.pos),
+      anchor("center"),
+      { letterCount: 0 },
+    ]);
+
+    // 400x400 photo (circular-cropped via ImageMagick at build time) →
+    // scale 0.35 ≈ 140px tall, fits the avatar slot above the textbox.
+    const avatar = add([
+      sprite("terry"),
+      scale(0.35),
+      anchor("center"),
+      pos(center().sub(0, 60)),
+    ]);
+
+    onButtonPress("next", () => {
+      if (isTalking) return;
+      if (atEnd) return;
+      curDialog++;
+      if (curDialog >= dialogs.length) {
+        atEnd = true;
+        showLinks();
+        return;
+      }
+      updateDialog();
+    });
+
+    function updateDialog() {
+      startWriting(dialogs[curDialog]);
     }
 
-    function closeGame() {
-      overlay.classList.remove('active');
+    function strippedLength(s) {
+      return s.replace(/\[\/?[a-z]+\]/g, "").length;
     }
 
-    $('#game-close').addEventListener('click', closeGame);
-    overlay.addEventListener('click', function (e) {
-      if (e.target === overlay) closeGame();
-    });
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && overlay.classList.contains('active')) closeGame();
-    });
+    function startWriting(dialog) {
+      isTalking = true;
+      txt.letterCount = 0;
+      txt.text = dialog;
+      const len = strippedLength(dialog);
+      const writing = loop(0.04, () => {
+        txt.letterCount = Math.min(txt.letterCount + 1, len);
+        play("terry_voice", { volume: 0.18 });
+        if (txt.letterCount == len) {
+          isTalking = false;
+          writing.cancel();
+        }
+      });
+    }
 
-    // ---- the prompt ----
-    var input = $('#cmd-input');
-    var typed = $('#typed');
-    var out = $('#out');
+    // ── Final scene: show the HTML link grid (outside the canvas) ───────
+    // We use HTML <a> tags rather than in-canvas buttons so taps land
+    // natively without going through kaplay's pointer-coordinate
+    // translation (which was hitting wrong spots on mobile, probably
+    // due to the canvas vs viewport scaling).
+    let musicHandle = null;
 
-    var LINKS = {
-      blog: 'https://blog.terrydjony.com',
-      github: 'https://github.com/terryds',
-      twitter: 'https://x.com/terry_djony',
-      email: 'mailto:hi@terrydjony.com',
-      yc: 'https://www.ycombinator.com/verify/jyj7tw4iclddid3l',
-      hn: 'https://news.ycombinator.com/submitted?id=terryds'
-    };
+    function showLinks() {
+      txt.text = "[default]choose your destination[/default]";
+      txt.letterCount = 999;
+      const grid = document.getElementById("link-grid");
+      if (grid) grid.classList.add("show");
+      document.body.classList.add("show-links");
 
-    function say(html) { out.innerHTML = html; }
-
-    function run(raw) {
-      var cmd = raw.trim().toLowerCase();
-      if (!cmd) { say(''); return; }
-
-      if (cmd === 'game' || cmd === '2048' || cmd === 'play') {
-        openGame();
-      } else if (cmd === 'help') {
-        say('commands: game · blog · github · twitter · email · yc · hn');
-      } else if (LINKS[cmd]) {
-        say('opening <a href="' + LINKS[cmd] + '" target="_blank" rel="noopener">' + LINKS[cmd] + '</a> …');
-        window.open(LINKS[cmd], '_blank', 'noopener');
-      } else if (cmd === 'sudo hire-me' || cmd === 'sudo hire me') {
-        say('access granted → <a href="mailto:hi@terrydjony.com">hi@terrydjony.com</a>');
-      } else if (cmd === 'whoami') {
-        say('Terry Djony — but you knew that already.');
-      } else if (cmd === 'pong') {
-        say('pong: retired undefeated.');
-      } else {
-        say(escapeHtml(cmd) + ': command not found — try \'game\'');
+      // Kick off the looping background music. play() returns a handle we
+      // could pause/stop later (e.g. a mute button); kept on a let in
+      // case we add that. iOS autoplay rules are satisfied here because
+      // this call chain originated from a tap on the kaplay canvas.
+      if (!musicHandle) {
+        musicHandle = play("music", { loop: true, volume: 0.35 });
       }
     }
 
-    input.addEventListener('input', function () {
-      typed.textContent = input.value;
-    });
-
-    input.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter') {
-        var v = input.value;
-        input.value = '';
-        typed.textContent = '';
-        run(v);
-      }
-    });
-
-    $('#prompt-area').addEventListener('click', function (e) {
-      if (e.target.closest('a, .cmd, button')) return;
-      input.focus({ preventScroll: true });
-    });
-
-    $('#game-hint').addEventListener('click', function () { run('game'); });
-
-    if (window.matchMedia('(pointer:fine)').matches) {
-      input.focus({ preventScroll: true });
-    }
-  })();
+    onLoad(() => updateDialog());
   </script>
 </body>
 </html>
