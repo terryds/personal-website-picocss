@@ -145,6 +145,24 @@
 
       let buildings = [];
       let stars = [];
+      let birds = [];
+      let shootingStars = [];
+      let nextShootingStarAt = 0;
+      let rockets = []; // firework launchers rising up
+      let particles = []; // exploded firework particles
+      let nextFireworkAt = 0;
+
+      // Bright vibrant palette for firework bursts
+      const FIREWORK_COLORS = [
+        [255, 220, 90],  // gold
+        [120, 255, 255], // cyan
+        [255, 100, 200], // magenta
+        [120, 255, 120], // green
+        [255, 140, 60],  // orange
+        [220, 130, 255], // purple
+        [255, 255, 255], // white
+        [100, 180, 255], // sky blue
+      ];
 
       function regen() {
         buildings = [];
@@ -176,18 +194,106 @@
           }
         });
 
-        // Sky stars — only above the rough silhouette horizon
+        // Sky stars — denser, with a small fraction of "bright" ones
+        // that twinkle more obviously
         stars = [];
         const skyTop = 0;
-        const skyBottom = cv.height - 240; // above tallest mid-layer
-        const starCount = Math.floor(cv.width * cv.height / 8000);
+        const skyBottom = cv.height - 200;
+        const starCount = Math.floor(cv.width * cv.height / 3500);
         for (let i = 0; i < starCount; i++) {
+          const bright = Math.random() < 0.05;
           stars.push({
             x: Math.random() * cv.width,
             y: skyTop + Math.random() * (skyBottom - skyTop),
-            size: Math.random() < 0.85 ? 1 : 2,
+            size: bright ? 2 : (Math.random() < 0.85 ? 1 : 2),
+            bright,
             phase: Math.random() * Math.PI * 2,
             speed: 0.5 + Math.random() * 1.5,
+          });
+        }
+
+        // Seed a few birds at random positions so the sky isn't empty
+        // immediately on load. Each bird flies horizontally with a slow
+        // wing flap.
+        birds = [];
+        const initialBirdCount = 5;
+        for (let i = 0; i < initialBirdCount; i++) birds.push(spawnBird(true));
+      }
+
+      function spawnBird(initial = false) {
+        const x = initial
+          ? Math.random() * cv.width
+          : cv.width + 20 + Math.random() * 100;
+        return {
+          x,
+          y: 40 + Math.random() * (cv.height * 0.4),
+          vx: -0.04 - Math.random() * 0.04,
+          flapPhase: Math.random() * Math.PI * 2,
+          flapSpeed: 0.008 + Math.random() * 0.006,
+          size: 9 + Math.random() * 6, // bigger so they read against the dark sky
+        };
+      }
+
+      function spawnShootingStar(t) {
+        // Always upper-right → lower-left diagonal (angle ~145° in canvas
+        // coords where 0°=right, 90°=down).
+        const startX = cv.width * 0.55 + Math.random() * cv.width * 0.45;
+        const startY = Math.random() * cv.height * 0.35;
+        const angleDeg = 140 + Math.random() * 15;
+        const angle = (angleDeg * Math.PI) / 180;
+        const speed = 0.6 + Math.random() * 0.4;
+        return {
+          x: startX,
+          y: startY,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          life: 0,
+          maxLife: 800 + Math.random() * 400,
+          bornAt: t,
+        };
+      }
+
+      function spawnRocket() {
+        // Launches from somewhere along the bottom of the visible sky,
+        // rises with a slight horizontal lean toward the centerish.
+        const startX = cv.width * 0.15 + Math.random() * cv.width * 0.7;
+        const startY = cv.height - 50;
+        const targetY = cv.height * (0.18 + Math.random() * 0.22);
+        const lean = (cv.width / 2 - startX) * 0.0006; // horizontal drift
+        const vy = -0.32 - Math.random() * 0.12; // upward, px/ms
+        const color = FIREWORK_COLORS[Math.floor(Math.random() * FIREWORK_COLORS.length)];
+        return {
+          x: startX,
+          y: startY,
+          vx: lean,
+          vy,
+          targetY,
+          color,
+          trail: [],
+        };
+      }
+
+      function explodeRocket(rocket) {
+        const burstSize = 26 + Math.floor(Math.random() * 18);
+        // Sometimes the burst recolors mid-burst — picks an alt color for
+        // a small fraction of particles for a "two-tone" firework.
+        const altColor =
+          Math.random() < 0.4
+            ? FIREWORK_COLORS[Math.floor(Math.random() * FIREWORK_COLORS.length)]
+            : null;
+        for (let i = 0; i < burstSize; i++) {
+          const angle = (i / burstSize) * Math.PI * 2 + Math.random() * 0.2;
+          const speed = 0.16 + Math.random() * 0.22;
+          const useAlt = altColor && Math.random() < 0.25;
+          particles.push({
+            x: rocket.x,
+            y: rocket.y,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed,
+            life: 0,
+            maxLife: 900 + Math.random() * 600,
+            color: useAlt ? altColor : rocket.color,
+            gravity: 0.00045 + Math.random() * 0.0002,
           });
         }
       }
@@ -201,7 +307,11 @@
       window.addEventListener("resize", resize);
       window.addEventListener("orientationchange", resize);
 
+      let lastT = 0;
       function step(t) {
+        const dt = lastT ? t - lastT : 16;
+        lastT = t;
+
         // Cozy night sky — deep indigo at top, warmer purple-pink near
         // horizon (city glow). Subtle green tint at the very bottom ties
         // back to the matrix theme.
@@ -215,9 +325,124 @@
 
         // Stars — small twinkling dots in the upper sky
         for (const s of stars) {
-          const twinkle = 0.4 + 0.6 * Math.abs(Math.sin(t * 0.001 * s.speed + s.phase));
+          const twinkle = s.bright
+            ? 0.6 + 0.4 * Math.abs(Math.sin(t * 0.003 * s.speed + s.phase))
+            : 0.4 + 0.6 * Math.abs(Math.sin(t * 0.001 * s.speed + s.phase));
           ctx.fillStyle = `rgba(255, 255, 220, ${twinkle * 0.9})`;
           ctx.fillRect(s.x, s.y, s.size, s.size);
+        }
+
+        // Shooting stars — rare, one at a time
+        if (t >= nextShootingStarAt) {
+          shootingStars.push(spawnShootingStar(t));
+          nextShootingStarAt = t + 8000 + Math.random() * 10000;
+        }
+        for (let i = shootingStars.length - 1; i >= 0; i--) {
+          const ss = shootingStars[i];
+          ss.life = t - ss.bornAt;
+          if (ss.life > ss.maxLife || ss.x < -50 || ss.x > cv.width + 50 || ss.y > cv.height) {
+            shootingStars.splice(i, 1);
+            continue;
+          }
+          // Advance position
+          ss.x += ss.vx * dt;
+          ss.y += ss.vy * dt;
+
+          // Trail: draw a short line behind the head, fading toward the tail
+          const trailLen = 60;
+          const tailX = ss.x - ss.vx * trailLen;
+          const tailY = ss.y - ss.vy * trailLen;
+          const gradT = ctx.createLinearGradient(tailX, tailY, ss.x, ss.y);
+          gradT.addColorStop(0, "rgba(255, 255, 255, 0)");
+          gradT.addColorStop(1, "rgba(255, 255, 255, 0.9)");
+          ctx.strokeStyle = gradT;
+          ctx.lineWidth = 2;
+          ctx.lineCap = "round";
+          ctx.beginPath();
+          ctx.moveTo(tailX, tailY);
+          ctx.lineTo(ss.x, ss.y);
+          ctx.stroke();
+          // Bright head
+          ctx.fillStyle = "rgba(255, 255, 255, 1)";
+          ctx.fillRect(ss.x - 1, ss.y - 1, 3, 3);
+        }
+
+        // Fireworks — rockets rise, explode at apex into colorful particles
+        if (t >= nextFireworkAt) {
+          rockets.push(spawnRocket());
+          // Occasional double-launch for that "grand finale" feel
+          if (Math.random() < 0.35) rockets.push(spawnRocket());
+          nextFireworkAt = t + 1400 + Math.random() * 2400;
+        }
+        // Rocket update + render
+        for (let i = rockets.length - 1; i >= 0; i--) {
+          const r = rockets[i];
+          r.x += r.vx * dt;
+          r.y += r.vy * dt;
+          // Smaller speed near top → "deceleration" feel
+          r.vy *= 0.997;
+          // Record trail point every frame for the rising streak
+          r.trail.push({ x: r.x, y: r.y, t });
+          while (r.trail.length > 12) r.trail.shift();
+
+          // Trail render
+          for (let j = 0; j < r.trail.length; j++) {
+            const tp = r.trail[j];
+            const a = (j / r.trail.length) * 0.7;
+            ctx.fillStyle = `rgba(${r.color[0]}, ${r.color[1]}, ${r.color[2]}, ${a})`;
+            ctx.fillRect(tp.x - 1, tp.y - 1, 2, 2);
+          }
+          // Head
+          ctx.fillStyle = `rgba(${r.color[0]}, ${r.color[1]}, ${r.color[2]}, 1)`;
+          ctx.fillRect(r.x - 1.5, r.y - 1.5, 3, 3);
+
+          if (r.y <= r.targetY || r.vy >= -0.05) {
+            explodeRocket(r);
+            rockets.splice(i, 1);
+          }
+        }
+        // Particle update + render
+        for (let i = particles.length - 1; i >= 0; i--) {
+          const p = particles[i];
+          p.life += dt;
+          if (p.life > p.maxLife) {
+            particles.splice(i, 1);
+            continue;
+          }
+          p.vy += p.gravity * dt;
+          p.x += p.vx * dt;
+          p.y += p.vy * dt;
+          const alpha = 1 - p.life / p.maxLife;
+          ctx.fillStyle = `rgba(${p.color[0]}, ${p.color[1]}, ${p.color[2]}, ${alpha})`;
+          ctx.fillRect(p.x - 1, p.y - 1, 2.5, 2.5);
+        }
+
+        // Birds — silhouettes flying right-to-left with flapping wings
+        for (let i = birds.length - 1; i >= 0; i--) {
+          const b = birds[i];
+          b.x += b.vx * dt;
+          b.flapPhase += b.flapSpeed * dt;
+          if (b.x < -30) {
+            birds.splice(i, 1);
+            continue;
+          }
+          // Wing height oscillates with sin(flapPhase) — gives the bird
+          // a classic "M" shape that bobs as it flies. Stroke is dark
+          // gray + nearly opaque so it reads against the night sky.
+          const wing = Math.abs(Math.sin(b.flapPhase)) * b.size * 0.7;
+          ctx.strokeStyle = "rgba(10, 10, 18, 0.95)";
+          ctx.lineWidth = 2.2;
+          ctx.lineCap = "round";
+          ctx.lineJoin = "round";
+          ctx.beginPath();
+          ctx.moveTo(b.x - b.size, b.y);
+          ctx.quadraticCurveTo(b.x - b.size * 0.5, b.y - wing, b.x, b.y);
+          ctx.quadraticCurveTo(b.x + b.size * 0.5, b.y - wing, b.x + b.size, b.y);
+          ctx.stroke();
+        }
+        // Spawn more aggressively + bigger cap so the sky doesn't feel empty
+        if (Math.random() < 0.008 && birds.length < 10) {
+          birds.push(spawnBird(false));
         }
 
         // Subtle horizon glow band
