@@ -51,8 +51,10 @@
   #wrap {
     position: relative;
     z-index: 1;
-    width: 100vw;
-    max-width: 100vw;
+    width: 100%;
+    /* Mobile fills viewport; desktop caps so the 640x480 canvas doesn't
+       blow up to fill a wide browser. */
+    max-width: 720px;
     flex: 1;
     display: flex;
     align-items: center;
